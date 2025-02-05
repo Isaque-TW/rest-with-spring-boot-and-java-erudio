@@ -9,4 +9,5 @@
     <fullyQualifiedTypeName name="org.springframework.web.context.request.WebRequest"/>
     <fullyQualifiedTypeName name="org.springframework.http.HttpStatus"/>
     <fullyQualifiedTypeName name="br.com.erudio.exceptions.UnsupportedMathOperationException"/>
+    <fullyQualifiedTypeName name="br.com.erudio.converters.NumberConverter"/>
 </qualifiedTypeNameHistroy>
