@@ -1020,3 +1020,12 @@ END
 
 !ENTRY org.springframework.tooling.boot.ls 1 0 2025-02-13 11:52:47.164
 !MESSAGE Classpath changed for project: rest-with-spring-boot-and-java-erudio
+
+!ENTRY org.eclipse.jdt.junit 4 0 2025-02-13 13:34:13.365
+!MESSAGE No tests found with test runner 'JUnit 5'.
+
+!ENTRY org.eclipse.jdt.junit 4 0 2025-02-13 13:36:01.332
+!MESSAGE No tests found with test runner 'JUnit 5'.
+
+!ENTRY org.eclipse.jdt.junit 4 0 2025-02-13 13:36:47.242
+!MESSAGE No tests found with test runner 'JUnit 5'.
