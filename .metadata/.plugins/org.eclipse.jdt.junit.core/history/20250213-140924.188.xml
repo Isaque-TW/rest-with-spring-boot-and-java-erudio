@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="PersonRepositoryTest" project="rest-with-spring-boot-and-java-erudio" tests="2" started="2" failures="0" errors="0" ignored="0">
+  <testsuite name="br.com.erudio.repositories.PersonRepositoryTest" time="0.698" displayname="PersonRepositoryTest" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.repositories.PersonRepositoryTest]">
+    <testcase name="testGivenPersonList_whenFindAll_thenReturnPersonList" classname="br.com.erudio.repositories.PersonRepositoryTest" time="0.691" displayname="Given Person List when Find All then Return Person List" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.repositories.PersonRepositoryTest]/[method:testGivenPersonList_whenFindAll_thenReturnPersonList()]"/>
+    <testcase name="testGivenPersonObject_whenSave_thenReturnSavedPerson" classname="br.com.erudio.repositories.PersonRepositoryTest" time="0.006" displayname="Given Person Object when Save then Return Saved Person" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.repositories.PersonRepositoryTest]/[method:testGivenPersonObject_whenSave_thenReturnSavedPerson()]"/>
+  </testsuite>
+</testrun>

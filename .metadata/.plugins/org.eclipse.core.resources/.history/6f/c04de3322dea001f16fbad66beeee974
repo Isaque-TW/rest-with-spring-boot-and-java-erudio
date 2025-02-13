@@ -1,0 +1,63 @@
+package br.com.erudio.repositories;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import br.com.erudio.model.Person;
+
+@DataJpaTest
+class PersonRepositoryTest {
+
+	@Autowired
+	private PersonRepository repository;
+	
+	@DisplayName("Given Person Object when Save then Return Saved Person")
+	@Test
+	void testGivenPersonObject_whenSave_thenReturnSavedPerson() {
+		
+		// Given / Arrange
+		Person person0 = new Person("Leandro", "Costa", "leandro@erudio.com", "Minas Gerais - Brasil", "male");
+		
+		// When / Act
+		Person savedPerson = repository.save(person0);
+		
+		// Then / Assert
+		assertNotNull(savedPerson);
+		assertTrue(savedPerson.getId() > 0);
+
+	}
+	@DisplayName("Given Person List when Find All then Return Person List")
+	@Test
+	void testGivenPersonList_whenFindAll_thenReturnPersonList() {
+		
+		// Given / Arrange
+		Person person0 = new Person("Leandro", 
+				"Costa", 
+				"leandro@erudio.com", 
+				"Minas Gerais - Brasil", 
+				"male");
+		Person person1 = new Person("Leonardo", 
+				"Silva", 
+				"leonardo@erudio.com", 
+				"Minas Gerais - Brasil", 
+				"male");
+		
+		repository.save(person0);
+		repository.save(person1);
+		
+		// When / Act
+		List<Person> personList = repository.findAll();
+		
+		// Then / Assert
+		assertNotNull(personList);
+		assertTrue(2, personList.size());
+		
+	}
+
+}
