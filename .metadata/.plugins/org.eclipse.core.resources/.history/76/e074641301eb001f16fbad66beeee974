@@ -1,0 +1,119 @@
+package br.com.erudio.repositories;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import br.com.erudio.model.Person;
+
+@DataJpaTest
+class PersonRepositoryTest {
+
+	@Autowired
+	private PersonRepository repository;
+	
+	@DisplayName("Given Person Object when Save then Return Saved Person")
+	@Test
+	void testGivenPersonObject_whenSave_thenReturnSavedPerson() {
+		
+		// Given / Arrange
+		Person person0 = new Person("Leandro", "Costa", "leandro@erudio.com", "Minas Gerais - Brasil", "male");
+		
+		// When / Act
+		Person savedPerson = repository.save(person0);
+		
+		// Then / Assert
+		assertNotNull(savedPerson);
+		assertTrue(savedPerson.getId() > 0);
+
+	}
+	
+	@DisplayName("Given Person List when Find All then Return Person List")
+	@Test
+	void testGivenPersonList_whenFindAll_thenReturnPersonList() {
+		
+		// Given / Arrange
+		Person person0 = new Person("Leandro", 
+				"Costa", 
+				"leandro@erudio.com", 
+				"Minas Gerais - Brasil", 
+				"male");
+		Person person1 = new Person("Leonardo", 
+				"Silva", 
+				"leonardo@erudio.com", 
+				"Minas Gerais - Brasil", 
+				"male");
+		
+		repository.save(person0);
+		repository.save(person1);
+		
+		// When / Act
+		List<Person> personList = repository.findAll();
+		
+		// Then / Assert
+		assertNotNull(personList);
+		assertEquals(2, personList.size());
+		
+	}
+	
+	@DisplayName("Given Person Object when FindById then Return Person Object")
+	@Test
+	void testGivenPersonObject_whenFindById_thenReturnPersonObject() {
+		
+		// Given / Arrange
+		Person person0 = new Person("Leandro", "Costa", "leandro@erudio.com", "Minas Gerais - Brasil", "male");
+		repository.save(person0);
+		
+		// When / Act
+		Person savedPerson = repository.findById(person0.getId()).get();
+		
+		// Then / Assert
+		assertNotNull(savedPerson);
+		assertEquals(person0.getId(), savedPerson.getId());
+
+	}
+	
+	@DisplayName("Given Person Object when FindByEmail then Return Person Object")
+	@Test
+	void testGivenPersonObject_whenFindByEmail_thenReturnPersonObject() {
+		
+		// Given / Arrange
+		Person person0 = new Person("Leandro", "Costa", "leandro@erudio.com", "Minas Gerais - Brasil", "male");
+		repository.save(person0);
+		
+		// When / Act
+		Person savedPerson = repository.findByEmail(person0.getEmail()).get();
+		
+		// Then / Assert
+		assertNotNull(savedPerson);
+		assertEquals(person0.getId(), savedPerson.getId());
+		
+	}
+	
+	@DisplayName("Given Person Object when UpdatePerson then Return Updated Person Object")
+	@Test
+	void testGivenPersonObject_whenUpdatePerson_thenReturnUpdatedPersonObject() {
+		
+		// Given / Arrange
+		Person person0 = new Person("Leandro", "Costa", "leandro@erudio.com", "Minas Gerais - Brasil", "male");
+		repository.save(person0);  // Salva a Pessoa
+		
+		// When / Act
+		Person savedPerson = repository.findByEmail(person0.getEmail()).get(); // Recupera a Pessoa
+		savedPerson.setFirstName("Luiz");  // Update da Pessoa / Atualizando
+		savedPerson.setEmail("luiz@erudio.com"); // Update
+		
+		Person updatePerson = repository.save(savedPerson);
+		
+		// Then / Assert
+		assertNotNull(savedPerson);
+		assertEquals(person0.getId(), savedPerson.getId());
+		
+	}
+
+}
