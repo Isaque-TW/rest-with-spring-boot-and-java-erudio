@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="PersonServicesTest" project="rest-with-spring-boot-and-java-erudio" tests="1" started="1" failures="0" errors="1" ignored="0">
+  <testsuite name="br.com.erudio.services.PersonServicesTest" time="1.089" displayname="PersonServicesTest" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.services.PersonServicesTest]">
+    <testcase name="testGivenPersonObject_WhenSavePerson_thenReturnPersonObject" classname="br.com.erudio.services.PersonServicesTest" time="1.089" displayname="Given Person Object When Save Person then Return Person Object" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.services.PersonServicesTest]/[method:testGivenPersonObject_WhenSavePerson_thenReturnPersonObject()]">
+      <error>java.lang.NullPointerException: Cannot invoke "java.lang.Long.longValue()" because the return value of "br.com.erudio.model.Person.getId()" is null
+	at br.com.erudio.services.PersonServicesTest.testGivenPersonObject_WhenSavePerson_thenReturnPersonObject(PersonServicesTest.java:58)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+</error>
+    </testcase>
+  </testsuite>
+</testrun>
