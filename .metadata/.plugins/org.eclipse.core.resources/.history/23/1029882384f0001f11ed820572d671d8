@@ -1,0 +1,73 @@
+# Testando a Camada de Repositórios de uma Aplicação Spring Boot
+
+Nesta sessão, vamos mergulhar em uma série de tópicos que irão expandir seus conhecimentos sobre o desenvolvimento de aplicações com o Spring Boot.
+
+## 📌 Tópicos abordados
+
+### 🔹 Notação `@DataJpaTest`
+A notação `@DataJpaTest` é muito útil para testar o comportamento de repositórios JPA. Ela configura um ambiente mínimo necessário para testar a camada de persistência, desativando componentes desnecessários, como controllers e serviços.
+
+### 🔹 Uso do Banco de Dados em Memória (H2)
+Aprenderemos como reestruturar nossa aplicação para suportar um banco de dados em memória usando o **H2**. Isso permitirá executar testes mais rápidos e independentes do banco de dados real.
+
+### 🔹 Testando operações CRUD
+Exploraremos como testar as principais operações de **Create, Read, Update e Delete (CRUD)** de forma automatizada. Isso garante a consistência dos dados e a funcionalidade correta das operações.
+
+### 🔹 Testando consultas personalizadas
+Aprenderemos a testar a operação de busca de pessoas por e-mail usando o recurso de **Query Methods** do Spring Data JPA. Também veremos como definir consultas personalizadas e validar os resultados corretamente.
+
+Cada tópico será acompanhado de **exemplos práticos** e **discussões teóricas** para facilitar a compreensão.
+
+---
+📌 *Este repositório faz parte de um estudo aprofundado sobre testes na camada de repositórios com Spring Boot.* 🚀
+
+# 📌 Testando Repositórios no Spring Boot
+
+## 📖 Introdução
+
+Nessa aula, iremos aprender os **conceitos por trás dos testes de repositórios**.
+
+## 🏗 Arquitetura da Aplicação
+
+Abaixo, temos uma arquitetura típica de uma aplicação **Spring Boot MVC**, onde diferentes camadas se comunicam:
+![img.png](img.png)
+
+- **Controller Layer** → Responsável por receber requisições HTTP e interagir com a camada de serviços.
+- **Service Layer** → Contém a lógica de negócio da aplicação.
+- **Repository Layer** → Gerencia a persistência dos dados, interagindo com o banco de dados.
+- **Database** → Armazena as informações e é acessado pela camada de repositórios.
+
+📌 Essa estrutura permite **separação de responsabilidades** e facilita a manutenção do código.
+
+---
+
+📢 **Nos próximos tópicos, vamos explorar como testar a camada de repositórios utilizando Spring Data JPA!** 🚀
+
+## 🛠️ Testando a Camada de Repositórios
+
+Quando testamos a **camada de repositórios**, devemos isolá-la das outras camadas. Isso significa que:
+
+❌ **Não testamos a camada de serviços (Service Layer).**  
+❌ **Não testamos a camada de controladores (Controller Layer).**  
+✅ **Focamos exclusivamente na Repository Layer.**
+
+---
+
+## 🏗 Banco de Dados em Memória com @DataJpaTest
+
+📌 **Por que não usamos um banco de dados real?**  
+Ao testar os repositórios, não é necessário se conectar a um banco de dados físico. Para isso, utilizamos a anotação `@DataJpaTest`, que:
+
+✔ **Configura automaticamente um banco de dados em memória (H2).**  
+✔ **Facilita testes rápidos e isolados.**  
+✔ **Permite testar operações de repositório sem dependência externa.**
+
+🔍 **E o Mockito?**  
+Não utilizamos **Mockito** aqui, pois **não precisamos mockar o banco de dados**. O `@DataJpaTest` já fornece um ambiente controlado para os testes.
+
+---
+
+## ⚠️ Desvantagens dessa Abordagem
+
+Embora essa abordagem seja útil, **existem algumas limitações**.  
+Mais adiante, exploraremos esses pontos com mais detalhes. Por enquanto, vamos aprender como utilizá-la corretamente! 🚀  
