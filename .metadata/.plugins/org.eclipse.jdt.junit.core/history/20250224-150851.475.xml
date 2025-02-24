@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="PersonServicesTest" project="rest-with-spring-boot-and-java-erudio" tests="2" started="2" failures="1" errors="0" ignored="0">
+  <testsuite name="br.com.erudio.services.PersonServicesTest" time="0.988" displayname="PersonServicesTest" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.services.PersonServicesTest]">
+    <testcase name="testGivenExistingEmail_WhenSavePerson_thenThrowsException" classname="br.com.erudio.services.PersonServicesTest" time="0.98" displayname="Given Existing Email When Save Person then ThrowsException" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.services.PersonServicesTest]/[method:testGivenExistingEmail_WhenSavePerson_thenThrowsException()]">
+      <failure>
+        <expected>class br.com.erudio.exceptions.EmailAlreadyExistsException</expected>
+        <actual>class br.com.erudio.exceptions.ResourceNotFoundException</actual>
+        org.opentest4j.AssertionFailedError: Unexpected exception type thrown, expected: &lt;br.com.erudio.exceptions.EmailAlreadyExistsException&gt; but was: &lt;br.com.erudio.exceptions.ResourceNotFoundException&gt;
+	at org.junit.jupiter.api.AssertionFailureBuilder.build(AssertionFailureBuilder.java:151)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:67)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:35)
+	at org.junit.jupiter.api.Assertions.assertThrows(Assertions.java:3128)
+	at br.com.erudio.services.PersonServicesTest.testGivenExistingEmail_WhenSavePerson_thenThrowsException(PersonServicesTest.java:71)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+Caused by: br.com.erudio.exceptions.ResourceNotFoundException: Person already exist with given e-Mail: Male
+	at br.com.erudio.services.PersonServices.create(PersonServices.java:47)
+	at br.com.erudio.services.PersonServicesTest.lambda$0(PersonServicesTest.java:72)
+	at org.junit.jupiter.api.AssertThrows.assertThrows(AssertThrows.java:53)
+	... 6 more
+
+
+      </failure>
+    </testcase>
+    <testcase name="testGivenPersonObject_WhenSavePerson_thenReturnPersonObject" classname="br.com.erudio.services.PersonServicesTest" time="0.008" displayname="Given Person Object When Save Person then Return Person Object" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.services.PersonServicesTest]/[method:testGivenPersonObject_WhenSavePerson_thenReturnPersonObject()]"/>
+  </testsuite>
+</testrun>

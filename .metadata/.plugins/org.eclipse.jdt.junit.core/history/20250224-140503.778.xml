@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="PersonServicesTest" project="rest-with-spring-boot-and-java-erudio" tests="2" started="2" failures="0" errors="0" ignored="0">
+  <testsuite name="br.com.erudio.services.PersonServicesTest" time="1.071" displayname="PersonServicesTest" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.services.PersonServicesTest]">
+    <testcase name="testGivenExistingEmail_WhenSavePerson_thenThrowsException" classname="br.com.erudio.services.PersonServicesTest" time="1.064" displayname="Given Existing Email When Save Person then ThrowsException" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.services.PersonServicesTest]/[method:testGivenExistingEmail_WhenSavePerson_thenThrowsException()]"/>
+    <testcase name="testGivenPersonObject_WhenSavePerson_thenReturnPersonObject" classname="br.com.erudio.services.PersonServicesTest" time="0.007" displayname="Given Person Object When Save Person then Return Person Object" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.services.PersonServicesTest]/[method:testGivenPersonObject_WhenSavePerson_thenReturnPersonObject()]"/>
+  </testsuite>
+</testrun>
