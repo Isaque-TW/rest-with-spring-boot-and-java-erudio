@@ -1,7 +1,4 @@
-# Testando a Camada de Repositórios de uma Aplicação Spring Boot
-
-
-Nesta sessão, vamos mergulhar em uma série de tópicos que irão expandir seus conhecimentos sobre o desenvolvimento de aplicações com o Spring Boot.
+### Nesta sessão, vamos mergulhar em uma série de tópicos que irão expandir seus conhecimentos sobre o desenvolvimento de aplicações com o Spring Boot.
 
 ## 📌 Tópicos abordados
 
@@ -20,7 +17,6 @@ Aprenderemos a testar a operação de busca de pessoas por e-mail usando o recur
 Cada tópico será acompanhado de **exemplos práticos** e **discussões teóricas** para facilitar a compreensão.
 
 ---
-📌 *Este repositório faz parte de um estudo aprofundado sobre testes na camada de repositórios com Spring Boot.* 🚀
 
 # 📌 Testando Repositórios no Spring Boot
 
@@ -31,7 +27,8 @@ Nessa aula, iremos aprender os **conceitos por trás dos testes de repositórios
 ## 🏗 Arquitetura da Aplicação
 
 Abaixo, temos uma arquitetura típica de uma aplicação **Spring Boot MVC**, onde diferentes camadas se comunicam:
-![img_2.png](img_2.png)
+![img.png](img.png) 
+
 - **Controller Layer** → Responsável por receber requisições HTTP e interagir com a camada de serviços.
 - **Service Layer** → Contém a lógica de negócio da aplicação.
 - **Repository Layer** → Gerencia a persistência dos dados, interagindo com o banco de dados.
@@ -71,8 +68,7 @@ Apesar de ser uma abordagem eficaz para testes unitários de repositórios, o us
 Por enquanto, essa é a abordagem que utilizaremos para testar a camada de repositório no **Spring Boot** utilizando **Spring Data JPA**.
 ________________________________________________________________________________________________________________________
 
-![img_3.png](img_3.png)
-# Testando Serviços com Mockito no Spring Boot
+# 📌 Testando Serviços com Mockito no Spring Boot
 
 ## Introdução
 Agora que aprendemos a testar nossos repositórios, vamos focar nos testes da camada de **serviços**.
@@ -104,7 +100,6 @@ O uso do Mockito nos permite testar a lógica de negócios sem precisar carregar
 -------------------------------------------------------------------------------------------------------------------------------------------------
 _________________________________________________________________________________________________________________________________________
 
-![img_6.png](img_6.png)
 # 🧪 Testando Controllers no Spring Boot
 
 ## 📌 Visão Geral
