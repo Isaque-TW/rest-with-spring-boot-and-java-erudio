@@ -1,4 +1,4 @@
-### Nesta sessão, vamos mergulhar em uma série de tópicos que irão expandir seus conhecimentos sobre o desenvolvimento de aplicações com o Spring Boot.
+### Nesta sessão, vamos mergulhar em uma série de tópicos que irão expandir nosso conhecimentos sobre o desenvolvimento de aplicações com o Spring Boot.
 
 ## 📌 Tópicos abordados
 
