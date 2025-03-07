@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="PersonControllerTest" project="rest-with-spring-boot-and-java-erudio" tests="2" started="2" failures="0" errors="2" ignored="0">
+  <testsuite name="br.com.erudio.controllers.PersonControllerTest" time="0.002" displayname="PersonControllerTest" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.controllers.PersonControllerTest]">
+    <testcase name="testGivenListOfPersons_WhenFindAllPersons_ShouldReturnPersonsList" classname="br.com.erudio.controllers.PersonControllerTest" time="0.002" displayname="JUnit test for test Given List Of Persons When Find All Persons Should Return Persons List" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.controllers.PersonControllerTest]/[method:testGivenListOfPersons_WhenFindAllPersons_ShouldReturnPersonsList()]">
+      <error>java.lang.Error: Unresolved compilation problem: 
+	Syntax error, insert "}" to complete MethodBody
+
+	at br.com.erudio.controllers.PersonControllerTest.&lt;init&gt;(PersonControllerTest.java:77)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+	at java.base/java.util.Optional.orElseGet(Optional.java:364)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+</error>
+    </testcase>
+    <testcase name="testGivenPersonObject_WhenCreatePerson_ShouldReturnSavedPerson" classname="br.com.erudio.controllers.PersonControllerTest" time="0.0" displayname="JUnit test for Given Person Object When Create Person Should Return Saved Person" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.controllers.PersonControllerTest]/[method:testGivenPersonObject_WhenCreatePerson_ShouldReturnSavedPerson()]">
+      <error>java.lang.Error: Unresolved compilation problem: 
+	Syntax error, insert "}" to complete MethodBody
+
+	at br.com.erudio.controllers.PersonControllerTest.&lt;init&gt;(PersonControllerTest.java:77)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:502)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:486)
+	at java.base/java.util.Optional.orElseGet(Optional.java:364)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+
+</error>
+    </testcase>
+  </testsuite>
+</testrun>
