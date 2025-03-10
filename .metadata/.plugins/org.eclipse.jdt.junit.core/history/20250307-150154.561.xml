@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="PersonControllerTest" project="rest-with-spring-boot-and-java-erudio" tests="1" started="1" failures="0" errors="0" ignored="0">
-  <testsuite name="br.com.erudio.controllers.PersonControllerTest" time="0.21" displayname="PersonControllerTest" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.controllers.PersonControllerTest]">
-    <testcase name="testGivenPersonObject_WhenCreatePerson_ShouldReturnSavedPerson" classname="br.com.erudio.controllers.PersonControllerTest" time="0.21" displayname="JUnit test for Given Person Object When Create Person Should Return Saved Person" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.controllers.PersonControllerTest]/[method:testGivenPersonObject_WhenCreatePerson_ShouldReturnSavedPerson()]"/>
-  </testsuite>
-</testrun>

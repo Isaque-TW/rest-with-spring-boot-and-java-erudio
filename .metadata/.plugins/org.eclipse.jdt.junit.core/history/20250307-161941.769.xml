@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="PersonControllerTest" project="rest-with-spring-boot-and-java-erudio" tests="2" started="2" failures="0" errors="0" ignored="0">
-  <testsuite name="br.com.erudio.controllers.PersonControllerTest" time="0.194" displayname="PersonControllerTest" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.controllers.PersonControllerTest]">
-    <testcase name="testGivenListOfPersons_WhenFindAllPersons_ShouldReturnPersonsList" classname="br.com.erudio.controllers.PersonControllerTest" time="0.154" displayname="JUnit test for test Given List Of Persons When Find All Persons Should Return Persons List" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.controllers.PersonControllerTest]/[method:testGivenListOfPersons_WhenFindAllPersons_ShouldReturnPersonsList()]"/>
-    <testcase name="testGivenPersonObject_WhenCreatePerson_ShouldReturnSavedPerson" classname="br.com.erudio.controllers.PersonControllerTest" time="0.039" displayname="JUnit test for Given Person Object When Create Person Should Return Saved Person" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.controllers.PersonControllerTest]/[method:testGivenPersonObject_WhenCreatePerson_ShouldReturnSavedPerson()]"/>
-  </testsuite>
-</testrun>
