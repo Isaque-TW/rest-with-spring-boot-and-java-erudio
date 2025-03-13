@@ -170,3 +170,54 @@ Usaremos o **Mockito** para criar objetos simulados (**mocks**) e testar os cont
 
 ### **JSONPath Library**
 Utilizaremos a **JSONPath Library**, que é uma **DSL para leitura de documentos JSON**, para fazer as **asserções** em nossos testes.  
+_______________________________________________________________________________________________________________________
+
+## Testes de Integração com Spring Boot
+
+Nesta seção, iremos explorar os testes de integração utilizando o Spring Boot.
+
+Durante essa jornada, vamos aprender sobre diferentes ferramentas e técnicas para garantir a qualidade e o bom funcionamento dos nossos endpoints.
+
+### Visão Geral
+
+Iniciaremos com uma visão geral dos testes de integração, compreendendo sua importância no desenvolvimento de aplicações.
+
+Como o nome sugere, os testes de integração têm foco na integração de diferentes camadas da aplicação. Isso também significa que não há uso de mocks. Basicamente, escrevemos testes de integração para validar funcionalidades que podem envolver interação com múltiplos componentes.
+
+### Annotation `@SpringBootTest`
+
+Vamos explorar a annotation `@SpringBootTest`, uma poderosa notação fornecida pelo Spring Boot para facilitar a criação e execução de testes de integração.
+
+Essa anotação inicializa um servidor embarcado, cria um web environment e possibilita que os métodos anotados com `@Test` executem testes de integração.
+
+Por padrão, `@SpringBootTest` não inicia um servidor. Para definir como os testes serão executados, precisamos adicionar o atributo `webEnvironment`. As principais opções disponíveis são:
+
+- **MOCK (Padrão)**: Carrega um `WebServerApplicationContext` e fornece um web environment mockado.
+- **RANDOM_PORT**: Carrega um `WebServerApplicationContext` e fornece um web environment real. O servidor embarcado é iniciado e exposto em uma porta aleatória. Essa opção deve ser usada para testes de integração.
+- **DEFINED_PORT**: Carrega um `WebServerApplicationContext` e fornece um web environment real em uma porta predefinida.
+- **NONE**: Carrega um `ApplicationContext` usando o `SpringApplication`, mas não fornece nenhum web environment.
+
+### Documentação com Swagger / OpenAPI
+
+Conheceremos o Swagger (OpenAPI) e veremos como utilizá-lo para documentar e testar nossos endpoints de forma eficiente e automatizada. Também abordaremos a configuração básica do Swagger em nosso projeto, permitindo que ele gere a documentação automaticamente.
+
+### Ferramentas Essenciais para Testes de Integração
+
+- **TestContainers**: Exploraremos como o TestContainers pode nos ajudar a preparar a infraestrutura necessária para executar nossos testes, garantindo um ambiente isolado e controlado.
+- **Validação do Swagger**: Verificaremos a geração da documentação do Swagger e sua integração com o TestContainers e Azure, garantindo que os endpoints estejam funcionando conforme esperado.
+
+### Testes de Repositórios e Banco de Dados
+
+Convertendo nossos testes de repositórios em testes de integração, interagindo diretamente com o banco de dados e validando o comportamento do código em um ambiente mais próximo do mundo real.
+
+### Testando Endpoints do `PersonController`
+
+Prepararemos a infraestrutura de testes para os endpoints de `PersonController`, validando as seguintes operações:
+
+- **Create**
+- **Update**
+- **FindById**
+- **FindAll**
+- **Delete**
+
+Ao longo dessas aulas, utilizaremos o Spring Boot em conjunto com diversas ferramentas e técnicas para criar testes de integração eficientes e confiáveis.
