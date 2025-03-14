@@ -201,12 +201,62 @@ Por padrão, `@SpringBootTest` não inicia um servidor. Para definir como os tes
 
 Conheceremos o Swagger (OpenAPI) e veremos como utilizá-lo para documentar e testar nossos endpoints de forma eficiente e automatizada. Também abordaremos a configuração básica do Swagger em nosso projeto, permitindo que ele gere a documentação automaticamente.
 
+Para isso, utilizaremos a dependência `SpringDoc OpenAPI Starter WebMVC UI`, que facilita a criação e exibição da documentação interativa.
+
 ### Ferramentas Essenciais para Testes de Integração
 
+- **MVN REPOSITORY**: Site para buscar dependências do `pom.xml`, incluindo bibliotecas essenciais para os testes de integração.
 - **TestContainers**: Exploraremos como o TestContainers pode nos ajudar a preparar a infraestrutura necessária para executar nossos testes, garantindo um ambiente isolado e controlado.
 - **Validação do Swagger**: Verificaremos a geração da documentação do Swagger e sua integração com o TestContainers e Azure, garantindo que os endpoints estejam funcionando conforme esperado.
 
+### Configuração de Beans no Spring
+
+No Spring, um **Bean** é um objeto que é instanciado, montado e gerenciado pelo container do Spring. O container do Spring busca informações em XML, anotações ou código Java sobre como os beans devem ser instanciados, configurados e montados, além de como eles se relacionam com outros beans. Esse processo é conhecido como **injeção de dependências**.
+
+Se você cria uma classe que depende de um bean, só precisa se preocupar com o que sua classe necessita, sem se preocupar com as dependências dela.
+
+Existem diferentes formas de criar beans no Spring:
+- Anotando classes com `@Component`, `@Service` ou `@Configuration` para que sejam gerenciadas pelo Spring.
+- Usando a anotação `@Bean` em um método para tornar a instância retornada um objeto gerenciado pelo Spring, seja de uma classe própria ou de terceiros.
+
+Essas classes que, do ponto de vista do Spring, são os beans, representam as regras de funcionamento da sua aplicação.
+
+### Configuração do OpenAPI no Projeto
+
+Para configurar a documentação da API com OpenAPI, utilizamos uma classe de configuração:
+
+```java
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class OpenAPIConfig {
+
+    @Bean // BEAN É UM OBJETO QUE É INSTANCIADO, MONTADO E GERENCIADO PELO CONTAINER DO SPRING.
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+            .info(new Info()
+                .title("Hello Swagger OpenAPI")
+                .version("v1")
+                .description("Some description about your API.")
+                .termsOfService("http://pub.erudio.com.br/meus-cursos")
+                .license(new License()
+                    .name("Apache 2.0")
+                    .url("http://pub.erudio.com.br/meus-cursos")
+                )
+            );
+    }
+}
+```
+
+Essa classe usa `@Configuration` para definir que contém configurações do Spring e `@Bean` para disponibilizar a instância de `OpenAPI` como um bean gerenciado pelo Spring.
+
 ### Testes de Repositórios e Banco de Dados
+
+Removemos o banco de dados H2 para criar testes de integração mais realistas, garantindo que a aplicação seja testada em um ambiente próximo ao de produção.
 
 Convertendo nossos testes de repositórios em testes de integração, interagindo diretamente com o banco de dados e validando o comportamento do código em um ambiente mais próximo do mundo real.
 
@@ -219,5 +269,31 @@ Prepararemos a infraestrutura de testes para os endpoints de `PersonController`,
 - **FindById**
 - **FindAll**
 - **Delete**
+______________________________________________________________________________________________________________________
 
-Ao longo dessas aulas, utilizaremos o Spring Boot em conjunto com diversas ferramentas e técnicas para criar testes de integração eficientes e confiáveis.
+### Resolvendo Problema com `Jakarta Bean Validation`
+
+Após a criação da classe de testes e adição das dependências, ao iniciar a aplicação, encontramos um erro. O Jakarta Bean Validation não conseguiu encontrar um provider para o Hibernate Validator.
+
+Para resolver esse problema, basta adicionar a dependência `Spring Boot Starter Validation` no `pom.xml`. Embora possamos utilizar diretamente o Hibernate Validator, é mais interessante usar a versão integrada ao Spring Boot, pois futuras atualizações do framework já incluirão quaisquer mudanças necessárias automaticamente.
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+```
+
+Após adicionar essa dependência e reiniciar a aplicação, o erro será resolvido e o Swagger estará acessível no navegador.
+
+### Validação do Swagger
+
+Após iniciar a aplicação com sucesso, podemos abrir o navegador e acessar `http://localhost:8080/swagger-ui/index.html` para visualizar a documentação do Swagger. As propriedades configuradas serão refletidas na interface do Swagger.
+
+Além disso, podemos testar nossa API diretamente pelo Swagger, verificando os endpoints e as respostas retornadas.
+
+### Criando Testes de Integração
+
+Nos próximos passos, iremos criar um teste de integração para garantir que o Swagger foi gerado corretamente e que os endpoints estão funcionando conforme esperado.
+
+
