@@ -295,5 +295,164 @@ Além disso, podemos testar nossa API diretamente pelo Swagger, verificando os e
 ### Criando Testes de Integração
 
 Nos próximos passos, iremos criar um teste de integração para garantir que o Swagger foi gerado corretamente e que os endpoints estão funcionando conforme esperado.
+_______________________________________________________________________________________________________________________
+
+# 🛠️ Testes de Integração com Spring Boot
+
+## 📌 Spring Doc Open API
+O **Spring Doc Open API** é um recurso valioso para documentar e testar APIs.  
+Se quiser entender melhor as propriedades, tags e detalhes da documentação, vale a pena conferir:  
+🔗 [Spring Doc Open API](https://springdoc.org/)
+
+## 📦 Test Containers
+O **Test Containers** é uma biblioteca Java que permite subir instâncias do Docker durante o ciclo de testes.  
+Ele fornece containers leves e descartáveis para:
+
+- Bancos de dados
+- Mensageria
+- Cache
+- Outros serviços que possam rodar em containers
+
+### 🔹 Benefícios
+✅ Ambientes de teste mais próximos ao de produção  
+✅ Automatização da criação e destruição dos containers  
+✅ Testes realistas com o mesmo banco da aplicação
+
+### 🔍 **Por que Test Containers e não H2?**
+Ao utilizar o banco de dados em memória **H2** nos testes, você pode enfrentar diferenças de sintaxe e comportamento em relação ao banco de produção. Isso ocorre porque o H2 não reflete fielmente bancos como MySQL ou PostgreSQL, podendo gerar falsos positivos nos testes.
+
+Com o **Test Containers**, os testes utilizam um banco de dados real rodando dentro de um container. Isso garante que:  
+✔️ O mesmo banco de produção seja usado nos testes  
+✔️ Os scripts SQL sejam executados exatamente como no ambiente real  
+✔️ O banco seja criado, inicializado com **Flyway** ou **Liquibase**, testado e destruído automaticamente
+
+🔗 [Site Oficial do Test Containers](https://testcontainers.com/)
+
+## 🔍 REST Assured
+O **REST Assured** facilita a criação de testes automatizados para APIs REST.  
+Ele suporta validações para **JSON, XML e YAML**, incluindo:
+
+- Status codes
+- Headers
+- Corpo da resposta
+
+🔗 [Site Oficial do REST Assured](https://rest-assured.io/)  
+🔗 [Maven Repository - REST Assured](https://mvnrepository.com/artifact/io.rest-assured/rest-assured)
+
+## ⚙️ Adicionando Dependências
+Para utilizar essas ferramentas, adicione as dependências no `pom.xml` do projeto.
+
+### **Test Containers**
+```xml
+<dependency>
+  <groupId>org.testcontainers</groupId>
+  <artifactId>testcontainers</artifactId>
+  <version>${testcontainers.version}</version>
+</dependency>
+
+### **Test Containers**
+```xml
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>testcontainers</artifactId>
+    <version>${testcontainers.version}</version>
+</dependency>
+```
+
+### REST Assured
+````
+<dependency>
+    <groupId>io.rest-assured</groupId>
+    <artifactId>rest-assured</artifactId>
+    <version>${restassured.version}</version>
+</dependency>
+````
+______________________________________________________________________________________________________________________
+
+## Configuração de TestContainers para Testes de Integração no Spring Boot
+
+### 1. Configuração do `application-test.yaml`
+
+Crie o arquivo `src/test/resources/application-test.yaml` e configure:
+
+```yaml
+server:
+  port: 8888  # Porta para evitar conflito com a aplicação principal
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/testdb
+    username: test
+    password: test
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false  # Defina como true para depuração
+```
+
+### 2. Criando a Classe de Configuração `TestConfigs`
+
+Crie a classe `TestConfigs` no pacote `config`:
+
+```java
+package config;
+
+public class TestConfigs {
+    public static final int SERVER_PORT = 8888;
+    public static final String CONTENT_TYPE_JSON = "application/json";
+}
+```
+
+### 3. Criando a Classe Base `AbstractIntegrationTest`
+
+Crie a classe `AbstractIntegrationTest` no pacote `br.com.studio.integrationtest.testcontainers`:
+
+```java
+package br.com.studio.integrationtest.testcontainers;
+
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MapPropertySource;
+import org.testcontainers.containers.MySQLContainer;
+
+import java.util.Map;
+
+@TestConfiguration
+public class AbstractIntegrationTest {
+
+    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+        private static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.28");
+
+        static {
+            mysql.start();
+        }
+
+        @Override
+        public void initialize(ConfigurableApplicationContext context) {
+            ConfigurableEnvironment environment = context.getEnvironment();
+            Map<String, Object> properties = Map.of(
+                "spring.datasource.url", mysql.getJdbcUrl(),
+                "spring.datasource.username", mysql.getUsername(),
+                "spring.datasource.password", mysql.getPassword()
+            );
+            environment.getPropertySources().addFirst(new MapPropertySource("testcontainers", properties));
+        }
+    }
+}
+```
+
+### 4. Explicação
+- O `application-test.yaml` configura um banco de dados externo para testes.
+- `TestConfigs` define constantes globais para os testes.
+- `AbstractIntegrationTest`:
+  - Inicia um container MySQL dinamicamente com TestContainers.
+  - Configura o contexto do Spring para utilizar as credenciais geradas pelo TestContainers.
+
+Agora, qualquer teste de integração pode estender `AbstractIntegrationTest` para utilizar essa infraestrutura!
+
+
 
 

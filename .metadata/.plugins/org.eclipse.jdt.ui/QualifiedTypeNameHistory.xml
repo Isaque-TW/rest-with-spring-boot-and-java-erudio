@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMethod"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
-    <fullyQualifiedTypeName name="java.lang.Deprecated"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RestController"/>
-    <fullyQualifiedTypeName name="org.springframework.web.context.request.WebRequest"/>
-    <fullyQualifiedTypeName name="org.springframework.http.HttpStatus"/>
     <fullyQualifiedTypeName name="br.com.erudio.exceptions.UnsupportedMathOperationException"/>
     <fullyQualifiedTypeName name="br.com.erudio.converters.NumberConverter"/>
     <fullyQualifiedTypeName name="java.io.Serializable"/>
@@ -60,4 +54,10 @@
     <fullyQualifiedTypeName name="io.swagger.v3.oas.models.OpenAPI"/>
     <fullyQualifiedTypeName name="java.lang.ProcessHandle.Info"/>
     <fullyQualifiedTypeName name="io.swagger.v3.oas.models.info.Info"/>
+    <fullyQualifiedTypeName name="org.springframework.test.context.ContextConfiguration"/>
+    <fullyQualifiedTypeName name="br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest"/>
+    <fullyQualifiedTypeName name="org.testcontainers.lifecycle.Startables"/>
+    <fullyQualifiedTypeName name="java.util.stream.Stream"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="org.springframework.core.env.ConfigurableEnvironment"/>
 </qualifiedTypeNameHistroy>
