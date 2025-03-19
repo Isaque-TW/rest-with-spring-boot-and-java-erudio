@@ -454,5 +454,111 @@ public class AbstractIntegrationTest {
 Agora, qualquer teste de integração pode estender `AbstractIntegrationTest` para utilizar essa infraestrutura!
 
 
+# Testes de Integração com Swagger no Spring Boot
+
+Aqui, vamos configurar e executar um teste de integração para garantir que a interface do Swagger UI está sendo carregada corretamente dentro do nosso projeto Spring Boot. Além disso, explicaremos as dependências necessárias e como executar os testes corretamente.
+
+## 📌 Dependências Necessárias
+
+Antes de rodar os testes, é fundamental ter as seguintes dependências no seu `pom.xml`:
+
+```xml
+<dependencies>
+    <!-- Spring Boot Test -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- RestAssured para testes de API -->
+    <dependency>
+        <groupId>io.rest-assured</groupId>
+        <artifactId>rest-assured</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- TestContainers para testes de integração -->
+    <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers</artifactId>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+```
+
+### Explicação das Dependências
+- **Spring Boot Test**: Proporciona suporte para a execução de testes unitários e de integração no Spring Boot.
+- **RestAssured**: Uma biblioteca que simplifica a realização de testes de API, permitindo chamadas HTTP de forma fluida.
+- **TestContainers**: Permite a criação de containers para bancos de dados e outras dependências, garantindo um ambiente isolado para testes de integração.
+
+## 🎯 Configuração do Teste de Integração
+
+Criamos uma classe de teste para validar se a interface do Swagger está sendo corretamente carregada. A classe estende `AbstractIntegrationTest` e usa o `SpringBootTest` com um ambiente de porta definida:
+
+```java
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+class SwaggerIntegrationTest extends AbstractIntegrationTest {
+
+    @Test
+    @DisplayName("JUnit test for Should Display Swagger UI Page")
+    void testShouldDisplaySwaggerUiPage() {
+        var content = given()
+            .basePath("/swagger-ui/index.html")
+            .port(TestConfigs.SERVER_PORT)
+            .when()
+                .get()
+            .then()
+                .statusCode(200)
+            .extract()
+                .body()
+                    .asString();
+        assertTrue(content.contains("Swagger UI"));
+    }
+}
+```
+
+### 🔹 Explicação do Teste
+- **`@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)`**: Configura o teste para rodar em uma porta fixa definida no `application.yml`.
+- **Estende `AbstractIntegrationTest`**: Garante que a infraestrutura do banco de dados e outras dependências estejam configuradas corretamente.
+- **Uso do RestAssured**: A API `RestAssured` facilita a execução de chamadas HTTP para validar o carregamento do Swagger UI.
+- **Validação do Status Code `200`**: Confirma que a página do Swagger foi carregada com sucesso.
+- **Validação do Conteúdo**: O teste verifica se a resposta contém "Swagger UI", garantindo que a interface está acessível.
+
+## 🚀 Executando os Testes
+
+### 🔹 Rodando um único teste
+Para executar apenas o teste de Swagger, utilize o seguinte comando:
+
+```sh
+mvn test -Dtest=SwaggerIntegrationTest
+```
+
+### 🔹 Rodando todos os testes do projeto
+Para executar todos os testes:
+
+```sh
+mvn test
+```
+
+### 🔹 Executando os testes na IDE
+Se estiver usando IntelliJ IDEA ou Eclipse:
+1. Navegue até a classe `SwaggerIntegrationTest`.
+2. Clique com o botão direito e selecione **Run 'SwaggerIntegrationTest'**.
+3. Para executar todos os testes, vá até `src/test/java` e selecione **Run 'All Tests'**.
+
+## 🛠️ Possíveis Erros e Soluções
+
+### ❌ `Failed to load ApplicationContext`
+Esse erro pode ocorrer se o Docker não estiver rodando. Certifique-se de iniciar o Docker antes de rodar os testes:
+
+```sh
+docker start
+```
+
+### ❌ `Failed to create DataSource`
+Isso pode indicar que o banco de dados não está inicializado corretamente. Verifique a configuração do `TestContainers` e se a conexão com o banco está funcionando.
+
+---
 
 
