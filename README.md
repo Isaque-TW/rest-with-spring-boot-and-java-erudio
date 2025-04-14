@@ -1,44 +1,172 @@
-### Nesta sessão, vamos mergulhar em uma série de tópicos que irão expandir nosso conhecimentos sobre o desenvolvimento de aplicações com o Spring Boot.
+ Este **README** é baseado no curso de **"Desenvolvimento de Aplicações Java com Spring Boot"**, focado na criação e execução de **Testes Unitários** e de **Integração** para aplicações Java utilizando o **Spring Boot 3**. A jornada inclui o uso de ferramentas como **JUnit 5**, **Mockito**, **TestContainers**, **TDD (Desenvolvimento Orientado a Testes)** e **Swagger** para documentar e testar os **endpoints** da **API.**
 
-## 📌 Tópicos abordados
+_______________________________________________________________________________________________________________________
+## 🚀 Objetivos do Curso
 
-### 🔹 Notação `@DataJpaTest`
-A notação `@DataJpaTest` é muito útil para testar o comportamento de repositórios JPA. Ela configura um ambiente mínimo necessário para testar a camada de persistência, desativando componentes desnecessários, como controllers e serviços.
+Ao longo deste README, vou detalhar todos os passos necessários para desenvolver e testar a aplicação de maneira eficaz. O objetivo é não apenas ensinar como aplicar as ferramentas mencionadas, mas também mostrar as melhores práticas para garantir que a aplicação tenha uma alta cobertura de testes e seja robusta em termos de qualidade e funcionalidade.
+_______________________________________________________________________________________________________________________
 
-### 🔹 Uso do Banco de Dados em Memória (H2)
-Aprenderemos como reestruturar nossa aplicação para suportar um banco de dados em memória usando o **H2**. Isso permitirá executar testes mais rápidos e independentes do banco de dados real.
+## 🛠️ Ferramentas Utilizadas
 
-### 🔹 Testando operações CRUD
-Exploraremos como testar as principais operações de **Create, Read, Update e Delete (CRUD)** de forma automatizada. Isso garante a consistência dos dados e a funcionalidade correta das operações.
+### Spring Boot 3
+O Spring Boot 3 é um framework baseado no Spring Framework, projetado para facilitar o desenvolvimento de aplicações Java, eliminando grande parte da configuração manual. Ele oferece inicialização rápida, configuração automática e um ecossistema robusto para a criação de microsserviços e APIs REST.
 
-### 🔹 Testando consultas personalizadas
-Aprenderemos a testar a operação de busca de pessoas por e-mail usando o recurso de **Query Methods** do Spring Data JPA. Também veremos como definir consultas personalizadas e validar os resultados corretamente.
+A versão Spring Boot 3 traz suporte aprimorado para Jakarta EE, compatibilidade com Java 17+, melhorias de desempenho e suporte nativo para GraalVM, permitindo a criação de aplicações mais eficientes e escaláveis.
+### JUnit 5
+JUnit 5 é um framework de testes para Java que oferece suporte para testes unitários e integração. Com o JUnit, podemos criar testes automatizados para garantir que o código da aplicação funcione corretamente.
 
-Cada tópico será acompanhado de **exemplos práticos** e **discussões teóricas** para facilitar a compreensão.
+### Mockito
+Mockito é uma ferramenta para criar **mocks** e **stubs** de objetos, permitindo que possamos testar a lógica da aplicação sem depender de implementações externas.
 
----
+### TestContainers
+O TestContainers permite que você use containers Docker para testes. Ao invés de depender de bancos de dados ou outras dependências em memória, podemos criar containers temporários para testar a aplicação de forma mais realista.
 
+### Swagger
+Swagger é uma ferramenta de documentação de APIs que cria uma interface gráfica onde você pode testar seus endpoints diretamente do navegador.
+
+Além disso, utilizaremos a abordagem **TDD (Test-Driven Development)**, que incentiva a escrita de testes antes da implementação do código. Essa prática melhora a qualidade do software, aumenta a cobertura de testes e reduz a ocorrência de bugs ao longo do desenvolvimento.
+
+
+O objetivo deste README é consolidar o aprendizado, explicando como configurar, desenvolver e testar uma aplicação usando essas ferramentas e práticas.
+________________________________________________________________________________________________________________________
+
+# 🔧 Configuração do Ambiente de Testes no Spring Boot
+
+Para configurar o ambiente de testes em uma aplicação Spring Boot 3, vamos começar pela criação do projeto até a configuração do arquivo `pom.xml` com as dependências necessárias.
+
+## Passo 1: Criação do Projeto Spring Boot 3 com o Spring Initializr
+
+A maneira mais fácil de começar um projeto Spring Boot é usar o [Spring Initializr](https://start.spring.io/), uma ferramenta online que gera o esqueleto do projeto com as dependências necessárias.
+_______________________________________________________________________________________________________________________
+### Configuração do Projeto
+
+Preencha as opções conforme descrito abaixo:
+
+- **Project**: Escolha "Maven Project".
+- **Language**: Selecione "Java".
+- **Spring Boot**: Certifique-se de estar usando a versão mais recente do Spring Boot 3.
+- **Group**: Informe o nome do grupo do seu projeto, como `com.exemplo`.
+- **Artifact**: Dê um nome ao seu artefato, como `meu-projeto`.
+- **Packaging**: Selecione "Jar".
+- **Java**: Escolha a versão do Java que você está utilizando (Java 17 ou superior é recomendado).
+
+### Seleção de Dependências
+
+As dependências devem ser escolhidas conforme a necessidade do seu projeto. Neste, utilizaremos as seguintes:
+- **Spring Web**: Para criar APIs RESTful.
+- **Spring Data JPA**: Para interagir com bancos de dados relacionais.
+- **H2 Database**: Para usar um banco de dados em memória, útil para testes.
+- **Spring Boot Test**: Inclua essa dependência para testes unitários e de integração.
+
+### Gerar o Projeto
+
+1. Clique em "Generate" para baixar o arquivo `.zip`.
+2. Extraia o arquivo e abra o projeto no seu IDE favorito.
+
+## Passo 2: Confirmação e Adição de Dependências no pom.xml
+Após criar o projeto usando o Spring Initializr e escolher as dependências iniciais, abra o arquivo **pom.xml** e verifique se as dependências necessárias para o ambiente de testes estão presentes. Se necessário, adicione dependências adicionais para atender aos requisitos do seu projeto.
+```xml
+<dependencies>
+  <!-- Spring Boot Test -->
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+  </dependency>
+
+  <!-- RestAssured para testes de API -->
+  <dependency>
+    <groupId>io.rest-assured</groupId>
+    <artifactId>rest-assured</artifactId>
+    <scope>test</scope>
+  </dependency>
+
+  <!-- TestContainers para testes de integração -->
+  <dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>testcontainers</artifactId>
+    <scope>test</scope>
+  </dependency>
+</dependencies>
+```
+Agora vamos entender o que cada uma dessas dependências faz.
+
+### 1. **Spring Boot Starter Test** (`spring-boot-starter-test`)
+
+Esta dependência é essencial para realizar testes no Spring Boot. Ela inclui várias ferramentas importantes para testar a aplicação, como JUnit, Mockito, Hamcrest, e Spring Test. Com ela, você tem suporte para:
+
+- **Testes de unidade**: Como testar componentes individuais da aplicação, como serviços e repositórios.
+- **Testes de integração**: Como realizar testes mais completos que envolvem o contexto do Spring Boot, como o banco de dados, endpoints REST e muito mais.
+- **Testes Web**: Inclui suporte para realizar testes no contexto de uma aplicação web, simulando requisições HTTP e verificando respostas.
+
+### 2. **RestAssured para Testes de API** (`rest-assured`)
+
+O RestAssured é uma biblioteca utilizada para facilitar a escrita de testes de integração em APIs REST. Ele fornece uma maneira muito simples e fluente de escrever testes para endpoints HTTP. Com ele, você pode:
+
+- **Realizar requisições HTTP** para a API.
+- **Verificar o status, corpo e cabeçalhos** das respostas HTTP.
+- **Validar o comportamento de sua API**, como o retorno de dados e o comportamento das operações CRUD.
+
+A dependência é configurada com o escopo `test`, indicando que será utilizada apenas para testes.
+
+### 3. **TestContainers para Testes de Integração** (`testcontainers`)
+
+O TestContainers é uma biblioteca muito útil para realizar testes de integração com recursos externos, como bancos de dados e sistemas externos. Ele permite que você execute containers Docker de maneira programática durante a execução dos testes. Com isso, você pode:
+
+- **Executar containers Docker** diretamente do seu código de teste, como um banco de dados PostgreSQL, MongoDB ou outros sistemas que sua aplicação depende.
+- **Testes de integração reais**: Ao invés de simular um banco de dados ou outro serviço, o TestContainers permite que você tenha um ambiente real e isolado para testar sua aplicação.
+- **Limpeza automática**: O TestContainers automaticamente destrói o container após o teste ser concluído, o que ajuda a manter seu ambiente de teste limpo e isolado.
+
+#### Assim como o RestAssured, o TestContainers também possui o escopo `test`, garantindo que ele só seja usado durante a execução dos testes.
+
+### Configuração de Banco de Dados em Memória (H2)
+
+Além das dependências acima, se você estiver testando interações com um banco de dados, como em testes de repositório usando `@DataJpaTest`, você também pode configurar um banco de dados em memória, como o H2, para testar sem a necessidade de um banco real.
+
+Adicione a dependência do H2 ao seu `pom.xml`:
+
+```xml
+<dependency>
+  <groupId>com.h2database</groupId>
+  <artifactId>h2</artifactId>
+  <scope>runtime</scope>/
+</dependency>
+```
 # 📌 Testando Repositórios no Spring Boot
 
 ## 📖 Introdução
 
-Nessa aula, iremos aprender os **conceitos por trás dos testes de repositórios**.
+Após a criação e configuração do projeto, vamos explorar os principais conceitos e práticas para testar repositórios no Spring Boot, com foco no uso da anotação `@DataJpaTest`, banco de dados em memória (H2), e as operações de persistência (CRUD).
+
+---
 
 ## 🏗 Arquitetura da Aplicação
 
-Abaixo, temos uma arquitetura típica de uma aplicação **Spring Boot MVC**, onde diferentes camadas se comunicam:
-![img.png](img.png) 
+Antes de mergulharmos nos testes, é importante entender a arquitetura típica de uma aplicação Spring Boot MVC, onde as camadas se comunicam conforme ilustrado abaixo:
+
+
+![img.png](img.png)
 
 - **Controller Layer** → Responsável por receber requisições HTTP e interagir com a camada de serviços.
 - **Service Layer** → Contém a lógica de negócio da aplicação.
 - **Repository Layer** → Gerencia a persistência dos dados, interagindo com o banco de dados.
 - **Database** → Armazena as informações e é acessado pela camada de repositórios.
 
-📌 Essa estrutura permite **separação de responsabilidades** e facilita a manutenção do código.
-
+ Essa estrutura permite **separação de responsabilidades** e facilita a manutenção do código.
+````
+└── main/java/com/example/app
+├── controller
+├── service
+├── repository
+├── model
+└── test/java/com/example/app
+├── controller
+├── service
+├── repository
+````
 ---
 
-# Testando Repositórios com @DataJpaTest no Spring Boot
+# 📌 Testando Repositórios com @DataJpaTest no Spring Boot
 
 ## Introdução
 Ao testar a camada de repositório, não testamos a **Service Layer** nem a **Controller Layer**. Nosso objetivo é isolar os testes da camada **Repository** sem precisar de um banco de dados real.
@@ -62,10 +190,141 @@ Ao utilizar `@DataJpaTest`, o Spring Boot:
 3. Cria um banco de dados H2 em memória.
 4. Executa os testes de maneira isolada, garantindo a integridade do ambiente.
 
-## Considerações Finais
-Apesar de ser uma abordagem eficaz para testes unitários de repositórios, o uso de um banco de dados em memória pode ter **desvantagens** em relação a bancos reais. Esse ponto será abordado mais adiante.
+## 🔍 Exemplo de Teste com @DataJpaTest
 
-Por enquanto, essa é a abordagem que utilizaremos para testar a camada de repositório no **Spring Boot** utilizando **Spring Data JPA**.
+### 1. Testando a operação de salvar (Create)
+
+```java
+@DisplayName("Given Person Object when Save then Return Saved Person")
+@Test
+void testGivenPersonObject_whenSave_thenReturnSavedPerson() {
+  // Given / Arrange: Criamos um objeto Person a ser salvo no banco de dados.
+  Person person0 = new Person("Leandro",
+          "Costa",
+          "leandro@erudio.com",
+          "Minas Gerais - Brasil",
+          "male");
+
+  // When / Act: O objeto Person é salvo no banco de dados (no banco H2 em memória).
+  Person savedPerson = repository.save(person0);
+
+  // Then / Assert: Verificamos se o objeto foi salvo corretamente.
+  // A primeira verificação garante que o objeto não é nulo após o salvamento.
+  assertNotNull(savedPerson);
+
+  // A segunda verificação garante que o ID do objeto foi atribuído corretamente (maior que 0).
+  assertTrue(savedPerson.getId() > 0);
+}
+```
+### O que estamos testando neste exemplo?
+Testando a operação de salvar **(Create)**: No primeiro teste, estamos criando um **objeto Person** e salvando-o no **banco de dados em memória**, garantindo que ele tenha um ID atribuído após o salvamento.
+_______________________________________________________________________________________________________________________
+####  Exemplo de requisição HTTP POST para criação de uma nova pessoa utilizando a ferramenta Bruno. O corpo da requisição é enviado no formato JSON, contendo os dados da pessoa a ser cadastrada. A resposta confirma o sucesso da operação, retornando o objeto criado com um ID gerado automaticamente, o status code 200 OK e salvando os dados no banco:
+![img_1.png](img_1.png)
+
+
+### 2. Testando a operação de busca/Leitura (Read)
+
+````java
+@DisplayName("Given Person List when Find All then Return Person List")
+@Test
+void testGivenPersonList_whenFindAll_thenReturnPersonList() {
+// Given / Arrange: Criamos dois objetos Person a serem salvos no banco.
+Person person1 = new Person("Leonardo",
+"Silva",
+"leonardo@erudio.com",
+"Minas Gerais - Brasil",
+"male");
+
+    // Salvamos as duas instâncias de Person no banco de dados.
+    repository.save(person0);
+    repository.save(person1);
+
+    // When / Act: Buscamos todos os objetos Person do repositório.
+    List<Person> personList = repository.findAll();
+
+    // Then / Assert: Verificamos se a lista de objetos Person foi retornada corretamente.
+    // A primeira verificação garante que a lista não é nula.
+    assertNotNull(personList);
+
+    // A segunda verificação garante que o número de pessoas retornadas é o esperado.
+    assertEquals(2, personList.size()); 
+ }
+ `````
+
+
+
+### O que estamos testando neste exemplo?
+Testando a operação de **busca (Read)**: No segundo teste, estamos salvando duas **instâncias de Person** e, em seguida, verificando se conseguimos recuperar ambas a partir do **repositório.**
+_______________________________________________________________________________________________________________________
+Exemplo de requisição HTTP GET para buscar os dados de uma pessoa utilizando a ferramenta Bruno. A requisição é enviada para a API especificando o ID da pessoa na URL. A resposta confirma o sucesso da operação, retornando os dados da pessoa cadastrada, o status code 200 OK e garantindo a recuperação das informações do banco:
+![img_3.png](img_3.png)
+
+### 3. Testando a operação de atualização (Update)
+
+```java
+@DisplayName("Given Person Object when UpdatePerson then Return Updated Person Object")
+@Test
+void testGivenPersonObject_whenUpdatePerson_thenReturnUpdatedPersonObject() {
+    // Given / Arrange: Salvamos o objeto Person no banco de dados.
+    repository.save(person0);
+    
+    // When / Act: Recuperamos a pessoa salva pelo email e realizamos a atualização dos dados.
+    Person savedPerson = repository.findByEmail(person0.getEmail()).get(); // Recupera a pessoa
+    savedPerson.setFirstName("Luiz"); // Atualiza o primeiro nome
+    savedPerson.setEmail("luiz@erudio.com"); // Atualiza o email
+    
+    Person updatedPerson = repository.save(savedPerson); // Salva a pessoa atualizada no banco
+    
+    // Then / Assert: Verificamos se os dados foram atualizados corretamente.
+    assertNotNull(updatedPerson); // Verifica se o objeto atualizado não é nulo
+    assertEquals("Luiz", updatedPerson.getFirstName()); // Verifica se o primeiro nome foi atualizado
+    assertEquals("luiz@erudio.com", updatedPerson.getEmail()); // Verifica se o email foi atualizado
+}
+```
+#### O que estamos testando neste exemplo?
+- **Testando a operação de atualização (Update)**: No terceiro teste, estamos recuperando um objeto `Person` salvo no banco de dados e alterando alguns de seus atributos. Após salvar a atualização, verificamos se os dados foram realmente modificados.
+________________________________________________________________________________________________________________________
+Exemplo de requisição HTTP PUT para atualização dos dados de uma pessoa utilizando a ferramenta Bruno. O corpo da requisição é enviado no formato JSON, contendo as informações atualizadas da pessoa. A resposta confirma o sucesso da operação, retornando o objeto modificado, o status code 200 OK e garantindo a persistência dos novos dados no banco;
+![img_4.png](img_4.png)
+---
+
+### 4. Testando a operação de remoção (Delete)
+
+```java
+@DisplayName("Given Person Object when Delete then Return Remove Person")
+@Test
+void testGivenPersonObject_whenDelete_thenReturnRemovePerson() {
+    // Given / Arrange: Salvamos a pessoa no banco de dados.
+    repository.save(person0);
+    
+    // When / Act: Deletamos a pessoa pelo ID.
+    repository.deleteById(person0.getId());
+    Optional<Person> personOptional = repository.findById(person0.getId()); // Tentamos recuperar a pessoa deletada
+    
+    // Then / Assert: Verificamos se a pessoa foi removida corretamente.
+    assertTrue(personOptional.isEmpty()); // Confirma que o Optional está vazio, ou seja, a pessoa foi deletada
+}
+```
+
+#### O que estamos testando neste exemplo?
+- **Testando a operação de remoção (Delete)**: No quarto teste, estamos deletando um objeto `Person` salvo no banco de dados e verificando se ele realmente foi removido ao tentar recuperá-lo.
+________________________________________________________________________________________________________________________
+
+Exemplo de requisição HTTP DELETE para exclusão de uma pessoa utilizando a ferramenta Bruno. A requisição é enviada para a URL correspondente ao ID da pessoa a ser removida. A resposta confirma o sucesso da operação com o status code 204 No Content, indicando que o recurso foi excluído do banco de dados sem retornar um corpo de resposta:
+![img_5.png](img_5.png)
+
+### 💡 Detalhes importantes:
+- O `repository.findByEmail(person0.getEmail()).get()` é usado para recuperar um objeto `Person` salvo pelo email.
+- O `Optional<Person>` é utilizado para verificar se o objeto foi realmente excluído, garantindo que o resultado seja `isEmpty()` após a remoção.
+- O  `@BeforeEach` é utilizado para configurar o estado antes de cada teste, criando uma instância da `classe` `Person` que será usada em múltiplos testes.
+- O `@Autowired` injeta automaticamente o repositório `PersonRepository`, permitindo que você execute operações diretamente no banco de dados em memória.
+---
+
+### 🔚 Considerações Finais
+O uso de **`@DataJpaTest`** permite validar as operações de **CRUD** da camada de persistência de maneira eficiente e isolada. Testes como esses garantem que a persistência dos dados funcione corretamente sem a necessidade de um banco de dados real, tornando os testes mais rápidos e confiáveis.
+
+Apesar de ser uma abordagem eficaz para testes unitários de repositórios, o uso de um banco de dados em memória pode ter **desvantagens** em relação a bancos reais. Esse ponto será abordado mais adiante.
 ________________________________________________________________________________________________________________________
 
 # 📌 Testando Serviços com Mockito no Spring Boot
@@ -76,7 +335,7 @@ Agora que aprendemos a testar nossos repositórios, vamos focar nos testes da ca
 Diferente dos repositórios, onde utilizamos a anotação `@DataJpaTest` para criar um banco de dados em memória e **não usamos o Mockito**, nos testes de serviços **utilizaremos o Mockito**.
 
 ## Anotações Utilizadas
-Para isso, utilizamos duas anotações do Mockito que já conhecemos:
+Para isso, utilizamos duas anotações do Mockito:
 
 - **`@Mock`**: Cria um mock (objeto simulado) de uma classe ou interface.
 - **`@InjectMocks`**: Injeta os mocks criados em uma instância da classe que está sendo testada.
@@ -90,53 +349,220 @@ Nos testes da camada de serviço, precisamos:
 3. Adicionar a extensão **MockitoExtension** para gerenciar os mocks corretamente.
 
 Dessa forma, conseguimos testar a lógica da camada de serviço sem depender de um banco de dados real.
-
+________________________________________________________________________________________________________________________
 ## Diferença entre Testes de Repositório e Serviço
 - **Repositório (`@DataJpaTest`)**: Utiliza um banco de dados em memória (H2) e **não usa o Mockito**.
 - **Serviço (Mockito)**: Não precisa de um banco de dados, pois usamos mocks para simular dependências.
 
+## 🔍 Exemplo de Teste
+
+### 1. Testando a operação de salvar (Create)
+Nesta seção, apresentamos a classe de teste completa, explicando todos os elementos necessários para criar e executar o teste corretamente.
+```java
+package br.com.erudio.services;
+```
+Este é o pacote onde a classe de teste está localizada.
+
+```java
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+
+import java.util.Optional;
+
+import static org.mockito.BDDMockito.*;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import br.com.erudio.exceptions.EmailAlreadyExistsException;
+import br.com.erudio.model.Person;
+import br.com.erudio.repositories.PersonRepository;
+```
+Aqui importamos todas as classes e métodos necessários para a execução do teste:
+- `Assertions` do JUnit para verificar os resultados esperados.
+- `ArgumentMatchers` e `BDDMockito` para configurar o comportamento dos mocks.
+- `JUnit` e `MockitoExtension` para facilitar a injeção de dependências.
+
+```java
+@ExtendWith(MockitoExtension.class)
+public class PersonServicesTest {
+```
+A anotação `@ExtendWith(MockitoExtension.class)` permite que o Mockito gerencie as injeções de dependências dentro da classe de teste.
+
+```java
+    @Mock
+    private PersonRepository repository;
+```
+Criamos um mock para a `PersonRepository`, simulando seu comportamento sem precisar de um banco de dados real.
+
+```java
+    @InjectMocks
+    private PersonServices services;
+```
+A anotação `@InjectMocks` cria uma instância de `PersonServices` e injeta os mocks necessários dentro dela.
+
+```java
+    private Person person0;
+```
+Declaramos uma variável para armazenar um objeto `Person`, que será usado nos testes.
+
+```java
+    @BeforeEach
+    public void setup() {
+```
+O método setup() é anotado com @BeforeEach, o que significa que ele será executado antes de cada teste da classe. Isso garante que cada teste comece com um estado inicial consistente e isolado, evitando interferências entre os testes. Neste caso, ele inicializa um objeto Person com dados predefinidos para ser utilizado nos testes.
+```java
+        person0 = new Person(
+                "Leandro",
+                "Costa",
+                "leandro@erudio.com.br",
+                "Uberlandia - Minas Gerais - Brasil",
+                "Male");
+    }
+```
+Aqui criamos um objeto `Person` com valores de exemplo.
+
+### 🔹 Teste: Criando um novo usuário
+
+```java
+    @DisplayName("Given Person Object When Save Person then Return Person Object")
+    @Test
+    void testGivenPersonObject_WhenSavePerson_thenReturnPersonObject() {
+```
+- O `@DisplayName` fornece uma descrição mais legível para o teste.
+- O @Test indica que o método a seguir é um caso de teste. Neste caso, ele verifica se a criação de uma nova pessoa ocorre corretamente, garantindo que o objeto retornado não seja nulo e que os dados foram armazenados conforme esperado
+```java
+        // Given / Arrange
+        given(repository.findByEmail(anyString())).willReturn(Optional.empty());
+        given(repository.save(person0)).willReturn(person0);
+```
+Aqui configuramos o comportamento do mock:
+- `findByEmail(anyString())` retorna um `Optional.empty()`, simulando que o e-mail ainda não está cadastrado.
+- `save(person0)` retorna o próprio objeto `person0`, simulando a persistência no banco de dados.
+
+```java
+        // When / Act
+        Person savedPerson = services.create(person0);
+```
+Chamamos o método `create(person0)`, que deve salvar a pessoa e retornar o objeto salvo.
+
+```java
+        // Then / Assert
+        assertNotNull(savedPerson);
+        assertEquals("Leandro", savedPerson.getFirstName());
+    }
+```
+Aqui validamos se o objeto retornado não é nulo e se o primeiro nome corresponde ao esperado.
+
+---
+
+## Resumo do Teste
+Neste teste:
+- Criamos um mock do `PersonRepository` para simular a interação com o banco de dados.
+- Definimos o comportamento esperado do mock ao buscar e salvar uma pessoa.
+- Testamos o método `create()` da classe `PersonServices`, verificando se ele retorna corretamente um objeto `Person` após a criação.
+- Garantimos que a pessoa foi salva com sucesso, validando que o retorno não é nulo e que os atributos foram mantidos corretamente.
+
+Este teste assegura que a lógica de criação de um novo usuário está funcionando corretamente dentro do serviço! ✅
+
+
 ## Considerações Finais
+
 O uso do Mockito nos permite testar a lógica de negócios sem precisar carregar todo o contexto da aplicação. Essa abordagem torna os testes mais rápidos e eficientes, garantindo que a camada de serviço funcione corretamente antes de integrá-la com outras partes do sistema.
--------------------------------------------------------------------------------------------------------------------------------------------------
-_________________________________________________________________________________________________________________________________________
 
-# 🧪 Testando Controllers no Spring Boot
+# 📌 Testando Controllers no Spring Boot
 
-## 📌 Visão Geral
-Durante essas aulas, vamos começar com uma visão geral dos testes de controllers e entender a importância de testar essa camada da nossa aplicação.
-
-Em seguida, vamos comparar duas anotações utilizadas para testes de controllers no Spring Boot.
+## Visão Geral
+Neste tópico, vamos explorar os testes de controllers e entender a importância de testar essa camada da nossa aplicação.
 
 ## 🔍 Comparação: `@WebMvcTest` vs `@SpringBootTest`
-O **Spring Boot** fornece a anotação `@WebMvcTest` para testar controllers **Spring MVC**.  
-Além disso, os testes baseados em `@WebMvcTest` são **mais rápidos**, pois carregam apenas o **controller especificado** e suas dependências, sem carregar a aplicação inteira.
 
-- O **Spring Boot** instancia apenas a **camada web**, em vez de todo o **Application Context**.
-- Em uma aplicação com vários controllers, você pode definir a instanciação de apenas um deles usando, por exemplo:
+No **Spring Boot**, as anotações `@WebMvcTest` e `@SpringBootTest` são utilizadas para testar controllers, mas elas têm propósitos e comportamentos diferentes.
+
+### `@WebMvcTest`
+
+A anotação `@WebMvcTest` é ideal para testar apenas a camada de **controller** em uma aplicação Spring MVC. Ela é mais **eficiente e rápida** porque carrega apenas o **controller** especificado e suas dependências, sem inicializar toda a aplicação. Ou seja, ao utilizar `@WebMvcTest`, o Spring Boot carrega apenas a **camada web** e não o contexto completo da aplicação.
+
+- **Vantagens**:
+  - **Mais rápido**, pois carrega apenas o necessário para testar o controller.
+  - Ideal para testar a lógica específica dos **controllers** sem precisar carregar a aplicação inteira.
+  - Utiliza mocks para as dependências do controller (como serviços e repositórios).
+
+- **Exemplo**:
   ```java
   @WebMvcTest(PersonController.class)
 
-## Testando as Operações
-Nos testes, colocaremos em prática o que aprendemos testando as operações mais comuns em nossos controladores.
+Nesse caso, o Spring Boot vai carregar apenas o `PersonController` e suas dependências (por exemplo, `PersonService`), sem carregar o restante da aplicação.
 
-### 🛠️ Operação de Criação (Create)
-- Garantir que os dados sejam enviados corretamente.
+### `@SpringBootTest`
 
-### 🔍 Operação de Busca (Find All)
-- Verificar se os resultados são retornados conforme esperado.
+A anotação `@SpringBootTest` é usada quando você precisa testar a aplicação como um todo, ou seja, todas as camadas do sistema, incluindo a camada **web**, **serviços**, **repositórios**, e **configurações** do Spring. Com essa anotação, o **ApplicationContext** completo é carregado.
 
-### 🔎 Operação de Busca por ID (Find by ID)
-- Testar cenários positivos e negativos (registros existentes e inexistentes).
+#### Vantagens:
 
-### ✏️ Operação de Atualização (Update)
-- Testar em cenários positivos e negativos.
+- Permite testes de **integração completos**, onde a aplicação é inicializada totalmente, simulando o comportamento real do sistema.
+- Ideal para cenários onde você precisa testar a interação entre várias camadas da aplicação.
 
-### 🗑️ Operação de Exclusão (Delete)
-- Garantir que os recursos sejam removidos adequadamente.
-- 
-### **JSONPath Library**
-Utilizaremos a **JSONPath Library**, que é uma **DSL para leitura de documentos JSON**, para fazer as **asserções** em nossos testes.
+#### Exemplo:
 
+```java
+@SpringBootTest
+```
+Aqui, o Spring Boot carrega a aplicação inteira, incluindo todas as configurações e beans.
+
+### Resumo
+
+- Use `@WebMvcTest` quando precisar testar **somente a camada de controllers** de forma rápida e isolada.
+- Use `@SpringBootTest` quando precisar testar a aplicação inteira, incluindo todas as camadas de integração.
+
+# PersonControllerTest
+
+Nesta seção, apresentamos a classe de teste completa, explicando todos os elementos necessários para criar e executar o teste corretamente.
+
+## Visão Geral
+
+A classe `PersonControllerTest` utiliza o `WebMvcTest` para testar os endpoints do `PersonController`, simulando requisições HTTP e verificando as respostas. O Mockito é usado para simular o comportamento do `PersonServices`.
+
+## Dependências
+
+-   `org.springframework.boot:spring-boot-starter-test`
+-   `org.mockito:mockito-core`
+-   `com.fasterxml.jackson.core:jackson-databind`
+
+## Configuração
+
+```java
+@WebMvcTest // Sobe todas as dependências necessárias para executar o Controller
+public class PersonControllerTest {
+
+  @Autowired
+  private MockMvc mockMvc; // Injetando MockMvc para fazer requisições no Controller
+
+  @Autowired
+  private ObjectMapper objectMapper; // Para serializar e desserializar JSON
+
+  @MockBean
+  private PersonServices service; // MockBean para injeção de dependências do Services
+
+  private Person person;
+
+  @BeforeEach
+  public void setup() {
+    // Given / Arrange
+    person = new Person("Leandro",
+            "Costa",
+            "leandro@erudio.com",
+            "Minas Gerais - Brasil",
+            "male");
+  }
+  // ... testes ...
+}
+```
 - JSONPath é uma ferramenta semelhante ao **XPath**, usada para XML, mas voltada para **JSON**.
 - No **JSONPath**, o objeto raiz sempre é referenciado com um **`$` (cifrão)**, independentemente de ser um objeto ou um array.
 
@@ -169,334 +595,613 @@ Ela nos ajuda a focar exclusivamente na camada de **controller** e suas interaç
 Usaremos o **Mockito** para criar objetos simulados (**mocks**) e testar os controllers isoladamente.
 
 ### **JSONPath Library**
-Utilizaremos a **JSONPath Library**, que é uma **DSL para leitura de documentos JSON**, para fazer as **asserções** em nossos testes.  
+Utilizaremos a **JSONPath Library**, que é uma **DSL para leitura de documentos JSON**, para fazer as **asserções** em nossos testes.
 _______________________________________________________________________________________________________________________
 
-## Testes de Integração com Spring Boot
+## 📌  Testes de Integração com Spring Boot + Test de Container
 
-Nesta seção, iremos explorar os testes de integração utilizando o Spring Boot.
-
-Durante essa jornada, vamos aprender sobre diferentes ferramentas e técnicas para garantir a qualidade e o bom funcionamento dos nossos endpoints.
-
-### Visão Geral
-
-Iniciaremos com uma visão geral dos testes de integração, compreendendo sua importância no desenvolvimento de aplicações.
-
-Como o nome sugere, os testes de integração têm foco na integração de diferentes camadas da aplicação. Isso também significa que não há uso de mocks. Basicamente, escrevemos testes de integração para validar funcionalidades que podem envolver interação com múltiplos componentes.
-
-### Annotation `@SpringBootTest`
-
-Vamos explorar a annotation `@SpringBootTest`, uma poderosa notação fornecida pelo Spring Boot para facilitar a criação e execução de testes de integração.
-
-Essa anotação inicializa um servidor embarcado, cria um web environment e possibilita que os métodos anotados com `@Test` executem testes de integração.
-
-Por padrão, `@SpringBootTest` não inicia um servidor. Para definir como os testes serão executados, precisamos adicionar o atributo `webEnvironment`. As principais opções disponíveis são:
-
-- **MOCK (Padrão)**: Carrega um `WebServerApplicationContext` e fornece um web environment mockado.
-- **RANDOM_PORT**: Carrega um `WebServerApplicationContext` e fornece um web environment real. O servidor embarcado é iniciado e exposto em uma porta aleatória. Essa opção deve ser usada para testes de integração.
-- **DEFINED_PORT**: Carrega um `WebServerApplicationContext` e fornece um web environment real em uma porta predefinida.
-- **NONE**: Carrega um `ApplicationContext` usando o `SpringApplication`, mas não fornece nenhum web environment.
 
 ### Documentação com Swagger / OpenAPI
 
-Conheceremos o Swagger (OpenAPI) e veremos como utilizá-lo para documentar e testar nossos endpoints de forma eficiente e automatizada. Também abordaremos a configuração básica do Swagger em nosso projeto, permitindo que ele gere a documentação automaticamente.
+Antes de irmos para os testes de Integração, vamos passar pela configuração do **Swagger / OpenAPI**
+Antes de começarmos com os testes de integração propriamente ditos, é importante garantir que nossa aplicação esteja bem documentada. Para isso, vamos integrar o **Swagger** em nosso projeto. O **Swagger** não apenas ajuda a documentar nossos endpoints de forma eficiente, mas também permite testar esses endpoints de maneira automatizada.
 
+Nesta seção, vamos abordar a configuração básica do **Swagger**, permitindo que ele gere a documentação automaticamente para nossa API, facilitando tanto a navegação quanto o entendimento dos endpoints que estão sendo testados.
 Para isso, utilizaremos a dependência `SpringDoc OpenAPI Starter WebMVC UI`, que facilita a criação e exibição da documentação interativa.
+________________________________________________________________________________________________________________________
+## 1️⃣ Configurando o **Swagger/OpenAPI** no Projeto
+Antes de iniciarmos os testes, precisamos garantir que o Swagger está configurado corretamente no nosso projeto. Ele será responsável por gerar automaticamente a documentação da API, tornando mais fácil visualizar e testar os endpoints.
 
-### Ferramentas Essenciais para Testes de Integração
+### 1.1 Adicionando a Dependência do Swagger
+Para isso acessamos o site do **MVN Repository** e buscamos por `springdoc`. Utilizaremos a `SpringDoc OpenAPI Starter WebMVC UI`
 
-- **MVN REPOSITORY**: Site para buscar dependências do `pom.xml`, incluindo bibliotecas essenciais para os testes de integração.
-- **TestContainers**: Exploraremos como o TestContainers pode nos ajudar a preparar a infraestrutura necessária para executar nossos testes, garantindo um ambiente isolado e controlado.
-- **Validação do Swagger**: Verificaremos a geração da documentação do Swagger e sua integração com o TestContainers e Azure, garantindo que os endpoints estejam funcionando conforme esperado.
+No arquivo `pom.xml`, adicionamos a dependência:
 
-### Configuração de Beans no Spring
+```xml
+<dependency>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.1.0</version>
+</dependency>
+```
 
-No Spring, um **Bean** é um objeto que é instanciado, montado e gerenciado pelo container do Spring. O container do Spring busca informações em XML, anotações ou código Java sobre como os beans devem ser instanciados, configurados e montados, além de como eles se relacionam com outros beans. Esse processo é conhecido como **injeção de dependências**.
+---
 
-Se você cria uma classe que depende de um bean, só precisa se preocupar com o que sua classe necessita, sem se preocupar com as dependências dela.
+### 1.2 Adicionando a classe OpenAPI
+Vamos criar uma classe de configurações do Swagger / Open API.
 
-Existem diferentes formas de criar beans no Spring:
-- Anotando classes com `@Component`, `@Service` ou `@Configuration` para que sejam gerenciadas pelo Spring.
-- Usando a anotação `@Bean` em um método para tornar a instância retornada um objeto gerenciado pelo Spring, seja de uma classe própria ou de terceiros.
-
-Essas classes que, do ponto de vista do Spring, são os beans, representam as regras de funcionamento da sua aplicação.
-
-### Configuração do OpenAPI no Projeto
-
-Para configurar a documentação da API com OpenAPI, utilizamos uma classe de configuração:
+No pacote `br.com.erudio`
+criamos a classe com nome de OpenAPIConfig no pacote `config`.
 
 ```java
+package br.com.erudio.config;
+
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@Configuration // Indica que essa classe é uma classe de configuração do Spring. 
+// Classes anotadas com @Configuration são usadas para definir beans e configurações do contexto da aplicação.
+
 public class OpenAPIConfig {
 
-    @Bean // BEAN É UM OBJETO QUE É INSTANCIADO, MONTADO E GERENCIADO PELO CONTAINER DO SPRING.
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-            .info(new Info()
-                .title("Hello Swagger OpenAPI")
-                .version("v1")
-                .description("Some description about your API.")
-                .termsOfService("http://pub.erudio.com.br/meus-cursos")
-                .license(new License()
-                    .name("Apache 2.0")
-                    .url("http://pub.erudio.com.br/meus-cursos")
-                )
+  @Bean // BEAN É UM OBJETO QUE É INSTANCIADO, MONTADO E GERENCIADO PELO CONTAINER DO SPRING.
+  // Aqui estamos dizendo que o método `customOpenAPI()` retorna um objeto que será gerenciado pelo Spring.
+  public OpenAPI customOpenAPI() {
+    return new OpenAPI() // Criação da instância principal da configuração do OpenAPI.
+            .info(new Info() // Define as informações principais da documentação da API.
+                    .title("Hello Swagger OpenAPI") // Título da API que será exibido na interface do Swagger.
+                    .version("v1") // Versão atual da API.
+                    .description("Some description about your API.") // Uma breve descrição sobre a API.
+                    .termsOfService("http://pub.erudio.com.br/meus-cursos") // URL com os termos de serviço.
+                    .license(new License() // Informações da licença da API.
+                            .name("Apache 2.0") // Nome da licença.
+                            .url("http://pub.erudio.com.br/meus-cursos") // URL com os detalhes da licença.
+                    )
             );
-    }
+  }
 }
 ```
+## Explicação do Código
 
-Essa classe usa `@Configuration` para definir que contém configurações do Spring e `@Bean` para disponibilizar a instância de `OpenAPI` como um bean gerenciado pelo Spring.
+✅ **`@Configuration`**: Essa anotação informa ao Spring que a classe `OpenAPIConfig` contém configurações que devem ser carregadas no momento da inicialização da aplicação. É como dizer: “Aqui tem configurações importantes!”
 
-### Testes de Repositórios e Banco de Dados
+✅ **`@Bean`**: Esse método registra um *bean* no contexto da aplicação Spring. Um *bean* é um objeto que será criado, configurado e gerenciado automaticamente pelo container do Spring. Esse processo é uma aplicação do princípio de **Inversão de Controle (IoC)** — ou seja, em vez de o próprio código instanciar o objeto, o framework faz isso por nós. Essa abordagem facilita a reutilização e a injeção de dependências sempre que esse objeto for necessário em outras partes da aplicação.
 
-Removemos o banco de dados H2 para criar testes de integração mais realistas, garantindo que a aplicação seja testada em um ambiente próximo ao de produção.
+✅ **`OpenAPI customOpenAPI()`**: Este método retorna uma instância da classe `OpenAPI`, que é a base para configurar a documentação da API via Swagger/OpenAPI
 
-Convertendo nossos testes de repositórios em testes de integração, interagindo diretamente com o banco de dados e validando o comportamento do código em um ambiente mais próximo do mundo real.
+✅ **`new Info()`**: Essa parte representa as informações visíveis na interface do Swagger, como título, versão e descrição da API.
 
-### Testando Endpoints do `PersonController`
+- **`title("Hello Swagger OpenAPI")`**: Define o título da documentação da API.
+- **`version("v1")`**: Mostra a versão atual da API que está sendo documentada.
+- **`description("Some description about your API.")`**: Um resumo ou visão geral sobre o propósito da API.
+- **`termsOfService("http://pub.erudio.com.br/meus-cursos")`**: Link para os termos de uso da API, caso existam.
+- **`license(new License()...)`**: Fornece informações sobre a licença da API, incluindo nome e link oficial.
 
-Prepararemos a infraestrutura de testes para os endpoints de `PersonController`, validando as seguintes operações:
+📘 Com essa configuração, o Swagger reconhece e exibe corretamente a documentação da API na interface gráfica. Isso é fundamental para que desenvolvedores possam visualizar endpoints, parâmetros e testar os serviços diretamente pelo navegador.
 
-- **Create**
-- **Update**
-- **FindById**
-- **FindAll**
-- **Delete**
-______________________________________________________________________________________________________________________
+### ❌ Falha ao Iniciar a Aplicação
 
-### Resolvendo Problema com `Jakarta Bean Validation`
+Ao tentar rodar a aplicação, encontramos o seguinte erro:
+`jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.`
 
-Após a criação da classe de testes e adição das dependências, ao iniciar a aplicação, encontramos um erro. O Jakarta Bean Validation não conseguiu encontrar um provider para o Hibernate Validator.
 
-Para resolver esse problema, basta adicionar a dependência `Spring Boot Starter Validation` no `pom.xml`. Embora possamos utilizar diretamente o Hibernate Validator, é mais interessante usar a versão integrada ao Spring Boot, pois futuras atualizações do framework já incluirão quaisquer mudanças necessárias automaticamente.
+Esse erro ocorre porque o Jakarta Bean Validation não encontrou um provedor de validação, como o Hibernate Validator, no classpath da aplicação.
+
+### ✅ Solução
+
+Para resolver esse problema, precisamos adicionar a dependência `spring-boot-starter-validation` ao nosso projeto. Essa dependência inclui o Hibernate Validator, que é a implementação de referência para o Jakarta Bean Validation.
+
+No arquivo `pom.xml`, adicionamos a seguinte dependência:
 
 ```xml
 <dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-validation</artifactId>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-validation</artifactId>
 </dependency>
 ```
+Após reiniciar a aplicação novamente podemos acessar a documentação interativa gerada pelo **Swagger UI** no seguinte endereço: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html).
+![img_6.png](img_6.png)
+Nessa interface, estarão disponíveis todas as propriedades e configurações que definimos anteriormente, permitindo visualizar e testar os endpoints da API de forma intuitiva.
+________________________________________________________________________________________________________________________
+### 🔍 Testando a API pela Interface Swagger UI
 
-Após adicionar essa dependência e reiniciar a aplicação, o erro será resolvido e o Swagger estará acessível no navegador.
+![img_7.png](img_7.png)
 
-### Validação do Swagger
+A imagem acima mostra o uso da interface do **Swagger UI** para testar o endpoint `GET /person`. Ao clicar em **Execute**, a requisição é enviada para a aplicação e a resposta da API é exibida logo abaixo.
 
-Após iniciar a aplicação com sucesso, podemos abrir o navegador e acessar `http://localhost:8080/swagger-ui/index.html` para visualizar a documentação do Swagger. As propriedades configuradas serão refletidas na interface do Swagger.
+ **Destaques da imagem:**
 
-Além disso, podemos testar nossa API diretamente pelo Swagger, verificando os endpoints e as respostas retornadas.
+- **Request URL:** `http://localhost:8080/person` — Endereço do endpoint que está sendo testado.
+- **Curl command:** Comando equivalente que poderia ser executado via terminal para fazer a mesma requisição.
+- **Response code:** `200 OK` — Indica que a requisição foi bem-sucedida.
+- **Response body:** Lista de pessoas cadastradas na base de dados. Cada objeto contém informações como `id`, `firstName`, `lastName`, `address`, `gender`, e `email`.
 
-### Criando Testes de Integração
+📋 No exemplo, a resposta inclui pessoas como:
+- **Ayrton Senna**, de São Paulo-SP.
+- **Leonardo da Vinci**, de Anchiano - Italy.
+- **Isaque dos Santos**, de São Paulo-SP.
 
-Nos próximos passos, iremos criar um teste de integração para garantir que o Swagger foi gerado corretamente e que os endpoints estão funcionando conforme esperado.
-_______________________________________________________________________________________________________________________
+✅ Essa interface permite testar facilmente os endpoints da API sem a necessidade de ferramentas externas, tornando o desenvolvimento mais rápido e visual.
 
-# 🛠️ Testes de Integração com Spring Boot
+🚀 **Benefício**: Ter essa configuração garante que a documentação da API seja gerada automaticamente sempre que o projeto for executado, promovendo transparência, agilidade no desenvolvimento e facilidade na integração com outros sistemas.
 
-## 📌 Spring Doc Open API
-O **Spring Doc Open API** é um recurso valioso para documentar e testar APIs.  
-Se quiser entender melhor as propriedades, tags e detalhes da documentação, vale a pena conferir:  
-🔗 [Spring Doc Open API](https://springdoc.org/)
 
-## 📦 Test Containers
-O **Test Containers** é uma biblioteca Java que permite subir instâncias do Docker durante o ciclo de testes.  
-Ele fornece containers leves e descartáveis para:
+### 🌐 Recurso Extra: Documentação Oficial do SpringDoc OpenAPI
+
+Se você quiser se aprofundar mais sobre o **SpringDoc OpenAPI**, recomendo dar uma olhada na documentação oficial. Lá você encontrará explicações detalhadas sobre todas as propriedades, anotações e tags que utilizamos — incluindo o significado de cada uma e como aplicá-las corretamente no seu projeto.
+
+🔗 [Documentação Oficial do SpringDoc OpenAPI](https://springdoc.org/)
+
+📘 Vale muito a pena conferir para entender melhor como personalizar e expandir a documentação da sua API de forma eficiente.
+
+________________________________________________________________________________________________________________________
+
+## 2️⃣ Ferramentas para os Testes de Integração
+
+Neste tópico, vamos conhecer uma ferramenta importante para os testes de integração: **Test Containers**.
+
+### Test Containers
+
+O **Test Containers** é uma biblioteca Java que facilita a criação de instâncias Docker durante o ciclo de testes. Ele usa a API do Docker para fornecer instâncias leves e descartáveis de diversos recursos, como:
 
 - Bancos de dados
-- Mensageria
-- Cache
-- Outros serviços que possam rodar em containers
+- Sistemas de mensageria
+- Cache, entre outros
 
-### 🔹 Benefícios
-✅ Ambientes de teste mais próximos ao de produção  
-✅ Automatização da criação e destruição dos containers  
-✅ Testes realistas com o mesmo banco da aplicação
+Essencialmente, qualquer coisa que possa ser executada em um container pode ser usada com o **Test Containers**.
 
-### 🔍 **Por que Test Containers e não H2?**
-Ao utilizar o banco de dados em memória **H2** nos testes, você pode enfrentar diferenças de sintaxe e comportamento em relação ao banco de produção. Isso ocorre porque o H2 não reflete fielmente bancos como MySQL ou PostgreSQL, podendo gerar falsos positivos nos testes.
+#### Requisitos
 
-Com o **Test Containers**, os testes utilizam um banco de dados real rodando dentro de um container. Isso garante que:  
-✔️ O mesmo banco de produção seja usado nos testes  
-✔️ Os scripts SQL sejam executados exatamente como no ambiente real  
-✔️ O banco seja criado, inicializado com **Flyway** ou **Liquibase**, testado e destruído automaticamente
+Para usar o **Test Containers**, é necessário ter o **Docker** instalado na máquina onde os testes serão executados. Se você ainda não tem o Docker instalado, siga os passos abaixo para instalar:
 
-🔗 [Site Oficial do Test Containers](https://testcontainers.com/)
+- Acesse o site oficial do [Docker](https://www.docker.com/get-started) e faça o download adequado para o seu sistema operacional.
+- Instale o Docker conforme as instruções do site.
 
-## 🔍 REST Assured
-O **REST Assured** facilita a criação de testes automatizados para APIs REST.  
-Ele suporta validações para **JSON, XML e YAML**, incluindo:
+### Por que usar o Test Containers?
 
-- Status codes
+Quando você utiliza o **Test Containers**, o processo de execução dos testes se torna mais realista. Ao contrário de outras soluções como o H2, que usa uma versão simplificada do banco de dados e pode ter diferenças na sintaxe SQL, o **Test Containers** executa os testes com o mesmo código que você escreveu.
+
+#### Exemplo de Como o Test Containers Funciona:
+
+- **Subindo o banco de dados**: O **Test Containers** sobe um container **Docker** com o banco de dados real que você está usando no seu projeto.
+- **Executando os testes**: Com a instância do banco no container, ele executa os testes exatamente como será no ambiente de produção.
+- **Limpeza**: Ao final dos testes, o container é destruído automaticamente, garantindo que não há resíduos ou efeitos colaterais.
+
+### Diferença do H2
+
+Ao utilizar o **H2**, você está criando um banco de dados em memória com uma sintaxe SQL que pode ser diferente da sua implementação real. Isso pode levar a diferenças no comportamento do sistema.
+
+Com o **Test Containers**, você testa com a mesma configuração que será utilizada em produção, o que torna os testes mais confiáveis e próximos da realidade.
+
+### Conclusão
+
+Portanto, com o **Test Containers**, você pode garantir que os testes de integração sejam executados em um ambiente mais realista e compatível com a produção. Lembre-se: para utilizá-lo, basta ter o **Docker** instalado e ele fará todo o trabalho de forma transparente.
+________________________________________________________________________________________________________________________
+### 2.1 REST-assured
+
+Outra ferramenta que vamos utilizar é o **REST Assured**, uma ferramenta desenvolvida para facilitar a criação de testes automatizados para APIs REST.
+
+### O que é o REST Assured?
+
+O **REST Assured** oferece suporte completo para a validação de requisições HTTP, além de permitir o trabalho com diferentes formatos de dados, como:
+
+- JSON
+- XML
+- YAML
+
+Essa ferramenta facilita a interação e validação de APIs, tornando o processo de testes automatizados mais simples e eficiente.
+
+### Funcionalidades
+
+Embora o **REST Assured** seja uma ferramenta poderosa, você pode precisar realizar algumas customizações para atender às necessidades específicas do seu projeto. No entanto, essas customizações não são complicadas de implementar.
+
+O **REST Assured** também oferece diversas opções de validação para as requisições enviadas aos nossos serviços REST, incluindo:
+
+- Status code
 - Headers
-- Corpo da resposta
+- Corpo da requisição (body)
 
-🔗 [Site Oficial do REST Assured](https://rest-assured.io/)  
-🔗 [Maven Repository - REST Assured](https://mvnrepository.com/artifact/io.rest-assured/rest-assured)
+Essas opções tornam o **REST Assured** extremamente flexível e adequado para a criação de testes automatizados de APIs.
 
-## ⚙️ Adicionando Dependências
-Para utilizar essas ferramentas, adicione as dependências no `pom.xml` do projeto.
+### Site Oficial
 
-### **Test Containers**
+Para mais informações, você pode acessar o [site oficial do REST Assured](https://rest-assured.io/).
+________________________________________________________________________________________________________________________
+
+### 2.2 Adicionando Dependências ao `pom.xml`
+
+Para utilizar as ferramentas **Test Containers** e **REST Assured** nos nossos testes de integração, precisamos adicionar suas respectivas dependências no arquivo `pom.xml`.
+
+#### Dependência do REST Assured
+
+O **REST Assured** é compatível com o Spring Boot, mas sua dependência precisa ser adicionada manualmente ao `pom.xml`.
+
+Você deve adicioná-la **logo abaixo das dependências do MySQL e do SpringDoc**, antes das dependências de testes. O trecho a ser incluído é:
+
+```xml
+<dependency>
+  <groupId>io.rest-assured</groupId>
+  <artifactId>rest-assured</artifactId>
+  <scope>test</scope>
+</dependency>
+```
+________________________________________________________________________________________________________________________
+### 2.3 Adicionando o Test Containers
+
+Agora que já definimos a dependência do **REST Assured**, o próximo passo é adicionar as dependências do **Test Containers** ao `pom.xml`.
+
+#### Como encontrar as dependências
+
+Vamos acessar novamente o [MVN Repository](https://mvnrepository.com/) e pesquisar por: `test container`
+
+A principal dependência que precisamos adicionar é a **Testcontainers Core**, que fornece a base para trabalhar com containers nos testes.
+
+#### Dependência base:
+
 ```xml
 <dependency>
   <groupId>org.testcontainers</groupId>
   <artifactId>testcontainers</artifactId>
-  <version>${testcontainers.version}</version>
-</dependency>
-
-### **Test Containers**
-```xml
-<dependency>
-    <groupId>org.testcontainers</groupId>
-    <artifactId>testcontainers</artifactId>
-    <version>${testcontainers.version}</version>
+  <version>${testcontainers.version</version>
+  <scope>test</scope>
 </dependency>
 ```
 
-### REST Assured
-````
+💡 Se o seu projeto utiliza um banco específico (como PostgreSQL, MySQL, etc.), também será necessário incluir a dependência correspondente ao banco. Por exemplo, para MySQL:
+
+````xml
 <dependency>
-    <groupId>io.rest-assured</groupId>
-    <artifactId>rest-assured</artifactId>
-    <version>${restassured.version}</version>
+   <groupId>org.testcontainers</groupId>
+   <artifactId>mysql</artifactId>
+   <version>${testcontainers.version}</version>
+  <scope>test</scope>
 </dependency>
 ````
-______________________________________________________________________________________________________________________
 
-## Configuração de TestContainers para Testes de Integração no Spring Boot
+### 2.4 Evite Usar Banco de Dados em Memória para Testes Reais
 
-### 1. Configuração do `application-test.yaml`
+Embora o uso de bancos de dados em memória, como o **H2**, possa ser útil em alguns cenários de testes simples, **não é recomendado utilizá-los para testes de integração reais**.
 
-Crie o arquivo `src/test/resources/application-test.yaml` e configure:
+Por quê?
+
+- Bancos como o **H2** possuem uma **sintaxe SQL diferente** daquela utilizada por bancos reais, como **PostgreSQL** ou **MySQL**.
+- Isso pode levar a **falsos positivos** nos testes, já que a aplicação pode funcionar com o H2, mas falhar no banco real em produção.
+- Ao utilizar um banco diferente do ambiente de produção, você perde a **confiabilidade dos testes**, já que eles não reproduzem o comportamento real da aplicação.
+
+#### A melhor prática
+
+Use o **Test Containers** para subir o **mesmo banco de dados real** (como PostgreSQL ou MySQL) dentro de um container **Docker** durante os testes.
+
+Dessa forma, seus testes de integração irão refletir com precisão o ambiente de produção, garantindo resultados mais confiáveis e evitando surpresas.
+
+> ✅ Exemplo:  
+> Se o seu projeto utiliza **PostgreSQL**, configure o **Test Containers** para subir um container com PostgreSQL.  
+> Se for **MySQL**, utilize um container com MySQL.
+
+________________________________________________________________________________________________________________________
+
+
+
+### 3️⃣ Preparando a Infraestrutura de Testes com TestContainers
+
+Nesta etapa, vamos configurar o ambiente de testes da aplicação para rodar de forma isolada, utilizando o **TestContainers**.
+### 3.1 Configurando o application.yaml de Testes
+
+
+Criaremos um arquivo específico para isso, garantindo que os testes não entrem em conflito com a aplicação principal durante a execução.
+
+#### 📁 Arquivo de configuração de testes
+
+No diretório `src/test/resources/`, criamos o arquivo `application.yaml` com o seguinte conteúdo:
 
 ```yaml
 server:
-  port: 8888  # Porta para evitar conflito com a aplicação principal
-
+  port: 8888
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/testdb
-    username: test
-    password: test
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: false  # Defina como true para depuração
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: false
 ```
 
-### 2. Criando a Classe de Configuração `TestConfigs`
+#### 🧩 Explicando as configurações
 
-Crie a classe `TestConfigs` no pacote `config`:
+- **`server.port: 8888`**  
+  Definimos a porta onde a aplicação será iniciada durante os testes.  
+  Usamos a porta `8888` para evitar conflito com a aplicação principal, que geralmente roda na porta `8080`.  
+  Isso permite que você execute a aplicação e os testes ao mesmo tempo, sem precisar parar a aplicação para testar.
+
+- **`spring.datasource.driver-class-name`**  
+  Define o driver JDBC para o banco que será utilizado nos testes.  
+  No nosso caso, utilizamos o driver do **MySQL**.
+
+- **`spring.jpa.hibernate.ddl-auto: update`**  
+  Essa opção permite que o Hibernate atualize automaticamente o schema do banco de dados durante os testes, criando as tabelas necessárias.
+
+- **`hibernate.dialect`**  
+  Especifica o dialeto SQL compatível com o banco que está sendo utilizado.  
+  Aqui usamos o `MySQL8Dialect`, já que o banco que será iniciado dentro do container é o **MySQL**.
+
+- **`show-sql: false`**  
+  Desativa o log dos SQLs gerados pelo Hibernate, deixando a saída dos testes mais limpa.  
+  Você pode ativar (`true`) caso queira depurar as queries geradas.
+
+> ⚠️ **Importante:**  
+> A **URL do banco**, o **nome de usuário** e a **senha** serão definidos **dinamicamente pelo TestContainers** durante a execução dos testes.  
+> Por isso, **não é necessário adicioná-los neste arquivo**.
+
+
+---
+### 3.2 Criando a Classe de Configuração dos Testes
+
+Agora, o que a gente vai fazer?
+
+Vamos criar uma classe de configuração exclusiva para os testes, onde definiremos constantes reutilizáveis, como a porta do servidor e o tipo de conteúdo padrão usado nas requisições.
+
+#### 📁 Passo a passo
+
+1. No diretório de testes (`src/test/java`), clique com o botão direito e selecione:
+  - **New > Java Class**
+2. Nomeie a classe como: `TestConfigs`
+3. Coloque essa classe no pacote: `config`
+
+#### 🧪 Estrutura inicial da classe
 
 ```java
 package config;
 
 public class TestConfigs {
-    public static final int SERVER_PORT = 8888;
-    public static final String CONTENT_TYPE_JSON = "application/json";
+
+  public static final int SERVER_PORT = 8888;
+
+  public static final String CONTENT_TYPE_JSON = "application/json";
+
 }
 ```
+🔎 O que essa classe faz?
 
-### 3. Criando a Classe Base `AbstractIntegrationTest`
+### Explicação do Código
+🔸 `public static final int SERVER_PORT = 8888;`
+Define a porta padrão usada para executar os testes de integração. Isso garante que todas as requisições RestAssured sejam feitas na porta correta onde o servidor da aplicação está rodando.
 
-Crie a classe `AbstractIntegrationTest` no pacote `br.com.studio.integrationtest.testcontainers`:
+Usamos `public static final porque:`
+
+- public: permite que a constante seja acessada de qualquer lugar no projeto.
+
+- static: pertence à classe e não a uma instância.
+
+- final: significa que o valor não pode ser alterado depois de definido.
+
+🔸 `public static final String CONTENT_TYPE_JSON = "application/json";`
+Define o tipo de conteúdo (Content-Type) que será usado nas requisições HTTP durante os testes.
+
+#### Ao definir `"application/json"`, estamos dizendo ao servidor que os dados enviados e esperados estão no formato JSON — que é o formato mais comum em APIs REST.
+________________________________________________________________________________________________________________________
+
+### 3.3 Criando a Classe `AbstractIntegrationTest`
+
+Agora, vamos criar a classe `AbstractIntegrationTest`, que será responsável por configurar o **TestContainers** e garantir um ambiente de testes isolado para nossa aplicação.
+
+###  O que essa classe faz?
+A classe `AbstractIntegrationTest` é usada para criar um banco de dados MySQL temporário dentro de um container, garantindo um ambiente de testes controlado e previsível. Ela ajusta automaticamente as configurações do **Spring Boot** para usar esse banco de dados temporário em vez de um banco de dados real.
+
+#### 🧱 Estrutura e localização
+
+Criando uma nova classe chamada `AbstractIntegrationTest` no seguinte pacote:
+`br.com.erudio.integrationtests.testcontainers`
+
+Nome da classe: `AbstractIntegrationTest`
+
+#### 🧪 Código da Classe
 
 ```java
-package br.com.studio.integrationtest.testcontainers;
+package br.com.erudio.integrationtests.testcontainers;
 
-import org.springframework.boot.test.context.TestConfiguration;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
+import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.lifecycle.Startables;
 
-import java.util.Map;
-
-@TestConfiguration
+@ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class)
 public class AbstractIntegrationTest {
 
-    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-        private static final MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.28");
+  static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-        static {
-            mysql.start();
-        }
+    static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.28");
 
-        @Override
-        public void initialize(ConfigurableApplicationContext context) {
-            ConfigurableEnvironment environment = context.getEnvironment();
-            Map<String, Object> properties = Map.of(
-                "spring.datasource.url", mysql.getJdbcUrl(),
-                "spring.datasource.username", mysql.getUsername(),
-                "spring.datasource.password", mysql.getPassword()
-            );
-            environment.getPropertySources().addFirst(new MapPropertySource("testcontainers", properties));
-        }
+    private static void startContainers() {
+      Startables.deepStart(Stream.of(mysql)).join();
     }
+
+    private static Map<String, String> createConnectionConfiguration() {
+      return Map.of(
+              "spring.datasource.url", mysql.getJdbcUrl(),
+              "spring.datasource.username", mysql.getUsername(),
+              "spring.datasource.password", mysql.getPassword()
+      );
+    }
+
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+      startContainers();
+      ConfigurableEnvironment environment = applicationContext.getEnvironment();
+      MapPropertySource testcontainers = new MapPropertySource(
+              "testcontainers",
+              (Map) createConnectionConfiguration()
+      );
+
+      environment.getPropertySources().addFirst(testcontainers);
+    }
+  }
 }
 ```
+### 3.4 Explicando a Classe `AbstractIntegrationTest`
 
-### 4. Explicação
-- O `application-test.yaml` configura um banco de dados externo para testes.
-- `TestConfigs` define constantes globais para os testes.
-- `AbstractIntegrationTest`:
-  - Inicia um container MySQL dinamicamente com TestContainers.
-  - Configura o contexto do Spring para utilizar as credenciais geradas pelo TestContainers.
+A classe `AbstractIntegrationTest` define a infraestrutura de testes de integração utilizando o [TestContainers](https://www.testcontainers.org/) para subir um banco de dados real (MySQL) dentro de um container Docker. Com isso, garantimos que os testes reflitam com mais precisão o comportamento da aplicação em produção, evitando inconsistências como as que ocorrem ao usar bancos em memória como o H2.
 
-Agora, qualquer teste de integração pode estender `AbstractIntegrationTest` para utilizar essa infraestrutura!
-
-
-# Testes de Integração com Swagger no Spring Boot
-
-Aqui, vamos configurar e executar um teste de integração para garantir que a interface do Swagger UI está sendo carregada corretamente dentro do nosso projeto Spring Boot. Além disso, explicaremos as dependências necessárias e como executar os testes corretamente.
-
-## 📌 Dependências Necessárias
-
-Antes de rodar os testes, é fundamental ter as seguintes dependências no seu `pom.xml`:
-
-```xml
-<dependencies>
-    <!-- Spring Boot Test -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-test</artifactId>
-        <scope>test</scope>
-    </dependency>
-
-    <!-- RestAssured para testes de API -->
-    <dependency>
-        <groupId>io.rest-assured</groupId>
-        <artifactId>rest-assured</artifactId>
-        <scope>test</scope>
-    </dependency>
-
-    <!-- TestContainers para testes de integração -->
-    <dependency>
-        <groupId>org.testcontainers</groupId>
-        <artifactId>testcontainers</artifactId>
-        <scope>test</scope>
-    </dependency>
-</dependencies>
-```
-
-### Explicação das Dependências
-- **Spring Boot Test**: Proporciona suporte para a execução de testes unitários e de integração no Spring Boot.
-- **RestAssured**: Uma biblioteca que simplifica a realização de testes de API, permitindo chamadas HTTP de forma fluida.
-- **TestContainers**: Permite a criação de containers para bancos de dados e outras dependências, garantindo um ambiente isolado para testes de integração.
-
-## 🎯 Configuração do Teste de Integração
-
-Criamos uma classe de teste para validar se a interface do Swagger está sendo corretamente carregada. A classe estende `AbstractIntegrationTest` e usa o `SpringBootTest` com um ambiente de porta definida:
+A seguir, apresentamos a classe e uma explicação detalhada:
 
 ```java
+package br.com.erudio.integrationtests.testcontainers;
+```
+- Define o pacote onde a classe está localizada. O ideal é que ela fique em um diretório separado dos testes unitários, como integrationtests.
+
+
+🧩 Explicando o Código:
+
+- Aqui, fazemos os  Imports e  classes necessárias do Spring e do TestContainers.
+
+````java
+import java.util.Map;
+import java.util.stream.Stream;
+
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MapPropertySource;
+import org.springframework.test.context.ContextConfiguration;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.lifecycle.Startables;
+````
+
+
+````java
+@ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class)
+````
+- Anota a classe informando ao Spring que ela deve usar a classe interna Initializer para configurar o ambiente dos testes antes de rodá-los.
+
+
+````java
+static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+````
+- Classe interna estática que implementa a interface ApplicationContextInitializer, utilizada para customizar o contexto de aplicação do Spring antes da sua inicialização.
+
+```java
+public class AbstractIntegrationTest {
+```
+- Classe abstrata que servirá como base para os testes de integração. Ela contém as configurações comuns que serão herdadas por outras classes de teste.
+
+````java
+static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.28");
+````
+- Aqui ele cria um **Container** do MySQL (para que você não precise baixar/instalar e criar um banco real MySQL) com a imagem mysql:8.0.28.
+
+- O <?> indica que essa instância pode aceitar qualquer tipo parametrizado (é um uso seguro para a versão genérica do container).
+
+- Essa versão foi testada e estável, mas pode ser substituída por outra, se necessário.
+
+````java
+private static void startContainers() {
+    Startables.deepStart(Stream.of(mysql)).join();
+}
+````
+- Método responsável por iniciar o container do MySQL.
+
+- Startables.deepStart(...) garante que todos os containers dependentes (se houver) também sejam iniciados corretamente.
+
+- join() bloqueia a thread até que o container esteja completamente inicializado.
+________________________________________________________________________________________________________________________
+
+Método que retorna as configurações de conexão:
+````java
+private static Map<String, String> createConnectionConfiguration() {
+    return Map.of(
+            "spring.datasource.url", mysql.getJdbcUrl(),
+            "spring.datasource.username", mysql.getUsername(),
+            "spring.datasource.password", mysql.getPassword()
+    );
+}
+````
+- Método auxiliar que retorna um Map com as propriedades de conexão geradas dinamicamente pelo container MySQL.
+
+- Essas informações são necessárias para que o Spring Boot consiga se conectar ao banco durante os testes.
+
+````java
+@Override
+public void initialize(ConfigurableApplicationContext applicationContext) {
+    startContainers();
+````
+- Este método é executado automaticamente antes da inicialização do contexto de testes.
+
+- Primeiro, chama startContainers() para garantir que o container do MySQL esteja ativo.
+
+````java
+ConfigurableEnvironment environment = applicationContext.getEnvironment();
+````
+- Recupera o ambiente de configuração atual do Spring, onde as propriedades de conexão serão injetadas.
+
+````java
+MapPropertySource testcontainers = new MapPropertySource(
+        "testcontainers",
+        (Map) createConnectionConfiguration());
+````
+- Cria uma nova fonte de propriedades (PropertySource) com as configurações de conexão do banco.
+
+- Essas propriedades terão prioridade sobre as demais.
+
+````java
+environment.getPropertySources().addFirst(testcontainers);
+}
+````
+- Adiciona a PropertySource no início da cadeia de propriedades do Spring.
+
+- Isso garante que a conexão com o banco definida pelo TestContainers sobrescreva qualquer outra configuração (como as do application.yaml).
+
+✅ **`MySQLContainer`**: Cria um banco de dados MySQL temporário dentro de um container.
+
+✅ **Método `startContainers()`**: Usa `Startables.deepStart()` para garantir que o container MySQL seja iniciado antes da execução dos testes.
+
+✅ **Método `createConnectionConfiguration()`**: Define as configurações de conexão com o banco de dados gerenciado pelo TestContainers.
+
+✅ **`ApplicationContextInitializer`**: Ajusta o contexto da aplicação para utilizar o banco de dados de testes gerenciado pelo TestContainers.
+
+✅ **`MapPropertySource`**: Injeta as configurações do banco de dados no ambiente do Spring, permitindo que a aplicação use esse banco temporário durante os testes.
+
+
+### Conclusão
+A classe AbstractIntegrationTest fornece uma estrutura reutilizável e automatizada para testes de integração com banco de dados real:
+________________________________________________________________________________________________________________________
+
+## 4️⃣ Configurando a Classe Base de Testes de Integração
+
+
+Agora que temos nossa infraestrutura de testes configurada, podemos avançar para a criação dos testes propriamente ditos!
+
+Vamos criar a classe `SwaggerIntegrationTest`, que será responsável por validar se a documentação do Swagger está acessível na API.
+
+###  O que essa classe faz?
+A classe `SwaggerIntegrationTest` é usada para garantir que a documentação do Swagger esteja disponível e funcionando corretamente dentro do ambiente de testes. Ela estende `AbstractIntegrationTest` para herdar a configuração do banco de testes e usa **RestAssured** para enviar requisições HTTP e validar as respostas.
+
+---
+No pacote `br.com.erudio.integrationtests.swagger`, vamos adicionar a seguinte classe:
+
+```java
+package br.com.erudio.integrationtests.swagger;
+
+import static io.restassured.RestAssured.given;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import br.com.erudio.config.TestConfigs;
+import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class SwaggerIntegrationTest extends AbstractIntegrationTest {
 
@@ -517,48 +1222,89 @@ class SwaggerIntegrationTest extends AbstractIntegrationTest {
     }
 }
 ```
+##  Explicação do Código
 
-### 🔹 Explicação do Teste
-- **`@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)`**: Configura o teste para rodar em uma porta fixa definida no `application.yml`.
-- **Estende `AbstractIntegrationTest`**: Garante que a infraestrutura do banco de dados e outras dependências estejam configuradas corretamente.
-- **Uso do RestAssured**: A API `RestAssured` facilita a execução de chamadas HTTP para validar o carregamento do Swagger UI.
-- **Validação do Status Code `200`**: Confirma que a página do Swagger foi carregada com sucesso.
-- **Validação do Conteúdo**: O teste verifica se a resposta contém "Swagger UI", garantindo que a interface está acessível.
+✅ **`testShouldDisplaySwaggerUiPage`**: Este teste verifica se a página do Swagger UI (`/swagger-ui/index.html`) está acessível.
 
-## 🚀 Executando os Testes
+✅ **Requisição e extração da resposta**: A requisição GET é enviada para a API, e a resposta recebida é convertida para uma string e armazenada na variável `content`. Essa abordagem permite que analisemos diretamente o conteúdo retornado.
 
-### 🔹 Rodando um único teste
-Para executar apenas o teste de Swagger, utilize o seguinte comando:
+✅ **Validação do conteúdo**: O método `assertTrue(content.contains("Swagger UI"))` garante que a resposta realmente contém a string esperada, confirmando que a página foi carregada corretamente.
 
+✅ **Uso de `given().basePath().port().when().get().then()`**: Essa estrutura representa um fluxo de teste com RestAssured:
+- `given()`: Configurações da requisição (basePath, porta, etc.).
+- `when().get()`: Executa a requisição GET para o endpoint desejado.
+- `then().statusCode(200)`: Verifica se a resposta tem o código de status HTTP esperado (200 - OK).
+- `extract().body().asString()`: Converte a resposta para string para facilitar a validação.
+_______________________________________________________________________________________________________________________
+
+## ⚠️ Possíveis Erros e Soluções
+
+Ao rodar a aplicação ou executar os testes de integração, alguns erros podem aparecer. Abaixo listamos os mais comuns e como resolvê-los:
+
+### ❌ Failed to load ApplicationContext
+Esse erro pode ocorrer se o **Docker** não estiver em execução. Certifique-se de que o Docker está iniciado antes de rodar os testes:
 ```sh
-mvn test -Dtest=SwaggerIntegrationTest
+docker info
 ```
 
-### 🔹 Rodando todos os testes do projeto
-Para executar todos os testes:
+### ❌ Failed to create DataSource
+Esse erro geralmente acontece quando o banco de dados não é inicializado corretamente. Verifique se a configuração do TestContainers está correta e se o container do banco foi iniciado com sucesso:
 
 ```sh
-mvn test
+docker ps
 ```
+### ⚠️ Testes não funcionam mesmo com tudo aparentemente certo
+Um detalhe importante: criamos a classe `AbstractIntegrationTest`, que é responsável por inicializar o container com o banco de dados, mas se não a estendermos nas classes de teste, ela nunca será chamada.
 
-### 🔹 Executando os testes na IDE
-Se estiver usando IntelliJ IDEA ou Eclipse:
-1. Navegue até a classe `SwaggerIntegrationTest`.
-2. Clique com o botão direito e selecione **Run 'SwaggerIntegrationTest'**.
-3. Para executar todos os testes, vá até `src/test/java` e selecione **Run 'All Tests'**.
+➡️ Solução:
+Certifique-se de que todas as suas classes de teste de integração estendem a `AbstractIntegrationTest`. Basta isso para garantir que o ambiente seja configurado corretamente para os testes.
 
-## 🛠️ Possíveis Erros e Soluções
+_______________________________________________________________________________________________________________________
 
-### ❌ `Failed to load ApplicationContext`
-Esse erro pode ocorrer se o Docker não estiver rodando. Certifique-se de iniciar o Docker antes de rodar os testes:
+## 🔁 Convertendo os Testes de Repositório em Testes de Integração
 
-```sh
-docker start
-```
+Vamos ajustar os nossos testes de repositório para se tornarem testes de integração usando o **TestContainers**.
 
-### ❌ `Failed to create DataSource`
-Isso pode indicar que o banco de dados não está inicializado corretamente. Verifique a configuração do `TestContainers` e se a conexão com o banco está funcionando.
+### 🧠 Por que fazer isso?
+
+Se queremos testar a aplicação de forma realista, o ideal é que ela aponte para o **MySQL** — o mesmo banco usado em produção — e **não para o H2**.
+
+Embora o H2 seja compatível com várias funcionalidades do MySQL, ele **não é o MySQL**, e em algum momento pode apresentar diferenças que impedem a validação completa da aplicação. Por isso, **usar Testes de Integração com TestContainers é mais confiável**, pois garante que os testes são executados exatamente no mesmo tipo de ambiente que será utilizado em produção.
 
 ---
 
+### 🛠️ Passos para transformar o teste de repositório em teste de integração:
 
+#### 1. Estenda a classe `AbstractIntegrationTest`
+No teste de repositório (por exemplo, `PersonRepositoryTest`), vamos adicionar a herança da classe de infraestrutura que criamos:
+
+```java
+public class PersonRepositoryTest extends AbstractIntegrationTest {
+}
+```
+#### 2. Configure o Spring para não substituir o DataSource
+Se executar os testes agora, pode encontrar um erro do tipo:
+````java
+Failed to create DataSource. Consider defining a DataSource bean or using a DataSourceInitializer.
+````
+O Spring, por padrão, tenta substituir o DataSource de testes. Para evitar isso e utilizar o DataSource fornecido pelo TestContainers, adicionamos a anotação:`@AutoConfigureTestDatabase`
+
+Por fim, a classe ficará assim:
+````java
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class PersonRepositoryTest extends AbstractIntegrationTest{
+}
+````
+
+Agora, ao rodar todos os testes, eles passarão.
+________________________________________________________________________________________________________________________
+
+
+## 🛠️ Considerações sobre Testes com Banco de Dados
+
+Ao testar a aplicação, é fundamental garantir que os testes utilizem o mesmo banco de dados que será usado em produção. Embora o **H2** seja compatível com muitas funcionalidades do **MySQL**, ele não é um substituto exato. Pequenas diferenças podem surgir e impedir a validação completa do comportamento da aplicação.
+
+Por isso, ao testar **repositórios**, é mais adequado utilizar **testes de integração** em vez de testes unitários. Testes unitários simulam o banco de dados, mas ao usar o H2, por exemplo, não há garantia de que o comportamento será idêntico ao do MySQL.
+
+Para solucionar esse problema, utilizamos o **TestContainers**. Essa ferramenta permite rodar um banco de dados real dentro de um container Docker, garantindo que os testes sejam executados no mesmo ambiente utilizado em produção. Dessa forma, conseguimos maior precisão e confiabilidade nos testes da aplicação.

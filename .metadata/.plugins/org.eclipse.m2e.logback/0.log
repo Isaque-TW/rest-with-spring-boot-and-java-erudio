@@ -1904,3 +1904,37 @@ org.eclipse.core.runtime.CoreException: Could not resolve artifact org.webjars:s
 2025-03-18 19:17:01,739 [Worker-53: Launching SwaggerIntegrationTest] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src/main/resources to target/classes
 2025-03-18 19:17:01,742 [Worker-53: Launching SwaggerIntegrationTest] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/test/resources to target/test-classes
 2025-03-19 13:32:23,901 [Worker-9: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2025-03-20 15:23:23,761 [Worker-2: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2025-03-20 15:40:46,234 [Worker-1: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2025-03-26 15:42:25,900 [Worker-7: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2025-03-26 15:42:51,951 [Worker-25: Launching rest-with-spring-boot-and-java-erudio - Startup] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/main/resources to target/classes
+2025-03-26 15:42:51,970 [Worker-25: Launching rest-with-spring-boot-and-java-erudio - Startup] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 3 resources from src/main/resources to target/classes
+2025-03-26 15:42:51,981 [Worker-25: Launching rest-with-spring-boot-and-java-erudio - Startup] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/test/resources to target/test-classes
+2025-03-28 11:07:50,351 [Worker-4: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2025-03-31 15:49:51,414 [Worker-8: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2025-04-02 15:13:57,738 [Worker-4: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2025-04-02 15:14:31,994 [Worker-7: Launching rest-with-spring-boot-and-java-erudio - Startup] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/main/resources to target/classes
+2025-04-02 15:14:32,007 [Worker-7: Launching rest-with-spring-boot-and-java-erudio - Startup] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 3 resources from src/main/resources to target/classes
+2025-04-02 15:14:32,017 [Worker-7: Launching rest-with-spring-boot-and-java-erudio - Startup] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/test/resources to target/test-classes
+2025-04-03 13:05:41,652 [Worker-6: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2025-04-03 13:30:24,748 [Worker-19: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/main/resources to target/classes
+2025-04-03 13:30:24,764 [Worker-19: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 7 resources from src/main/resources to target/classes
+2025-04-03 13:30:24,777 [Worker-19: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/test/resources to target/test-classes
+2025-04-03 13:33:29,782 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src/main/resources to target/classes
+2025-04-03 13:33:29,784 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src/main/resources to target/classes
+2025-04-03 13:33:29,786 [Worker-21: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/test/resources to target/test-classes
+2025-04-03 13:34:59,956 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src/main/resources to target/classes
+2025-04-03 13:34:59,957 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 0 resource from src/main/resources to target/classes
+2025-04-03 13:34:59,961 [Worker-20: Building] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/test/resources to target/test-classes
+2025-04-03 15:17:24,988 [Worker-1: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2025-04-09 14:00:26,908 [Worker-16: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2025-04-10 14:56:13,814 [Worker-7: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2025-04-10 15:51:36,496 [Worker-20: Launching rest-with-spring-boot-and-java-erudio - Startup] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/main/resources to target/classes
+2025-04-10 15:51:36,515 [Worker-20: Launching rest-with-spring-boot-and-java-erudio - Startup] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 7 resources from src/main/resources to target/classes
+2025-04-10 15:51:36,546 [Worker-20: Launching rest-with-spring-boot-and-java-erudio - Startup] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/test/resources to target/test-classes
+2025-04-11 10:54:56,566 [Worker-6: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2025-04-14 14:01:25,965 [Worker-2: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is out-of-date. Trying to update.
+2025-04-14 14:16:48,180 [Worker-18: Launching rest-with-spring-boot-and-java-erudio - Startup] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/main/resources to target/classes
+2025-04-14 14:16:48,195 [Worker-18: Launching rest-with-spring-boot-and-java-erudio - Startup] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 7 resources from src/main/resources to target/classes
+2025-04-14 14:16:48,212 [Worker-18: Launching rest-with-spring-boot-and-java-erudio - Startup] INFO  o.a.m.s.f.DefaultMavenResourcesFiltering - Copying 1 resource from src/test/resources to target/test-classes
+2025-04-14 15:32:31,440 [Worker-2: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
