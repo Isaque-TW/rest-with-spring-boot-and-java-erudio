@@ -1300,7 +1300,6 @@ class PersonRepositoryTest extends AbstractIntegrationTest{
 Agora, ao rodar todos os testes, eles passarão.
 ________________________________________________________________________________________________________________________
 
-
 ## 🛠️ Considerações sobre Testes com Banco de Dados
 
 Ao testar a aplicação, é fundamental garantir que os testes utilizem o mesmo banco de dados que será usado em produção. Embora o **H2** seja compatível com muitas funcionalidades do **MySQL**, ele não é um substituto exato. Pequenas diferenças podem surgir e impedir a validação completa do comportamento da aplicação.
@@ -1308,3 +1307,175 @@ Ao testar a aplicação, é fundamental garantir que os testes utilizem o mesmo 
 Por isso, ao testar **repositórios**, é mais adequado utilizar **testes de integração** em vez de testes unitários. Testes unitários simulam o banco de dados, mas ao usar o H2, por exemplo, não há garantia de que o comportamento será idêntico ao do MySQL.
 
 Para solucionar esse problema, utilizamos o **TestContainers**. Essa ferramenta permite rodar um banco de dados real dentro de um container Docker, garantindo que os testes sejam executados no mesmo ambiente utilizado em produção. Dessa forma, conseguimos maior precisão e confiabilidade nos testes da aplicação.
+________________________________________________________________________________________________________________________
+
+## ✅ Testes de Integração com RestAssured
+
+Os testes de integração permitem verificar se a aplicação funciona corretamente de ponta a ponta, passando por todas as camadas — do Controller até o banco de dados. Isso simula uma requisição real, como se estivesse sendo feita via Postman ou Insomnia.
+
+### 🔧 Estrutura da Classe
+
+A classe `PersonControllerIntegrationTest` está localizada no pacote:
+`br.com.erudio.integrationtests.controller
+`
+
+Ela estende a classe `AbstractIntegrationTest`, garantindo a configuração dos TestContainers e ambiente Spring Boot.
+
+### ⚙️ Annotations e Configuração
+
+Utilizamos as seguintes anotações:
+
+- `@SpringBootTest(webEnvironment = DEFINED_PORT)` – Inicializa o servidor em uma porta fixa.
+- `@TestMethodOrder(OrderAnnotation.class)` – Garante a ordem dos testes com base na anotação `@Order`.
+- `@BeforeAll` – Define as configurações globais antes da execução dos testes.
+
+### ⚙️ Setup
+
+Durante o `@BeforeAll`, são configurados:
+
+- `ObjectMapper` para serialização/deserialização JSON (ignora propriedades desconhecidas).
+- `RequestSpecification` do RestAssured, com:
+  - Caminho base (`setBasePath`)
+  - Porta (`setPort`)
+  - Filtros de log para request/response com `LogDetail.ALL`
+
+```java
+@BeforeAll
+public void setup() {
+    objectMapper = new ObjectMapper();
+    objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+    specificantion = new RequestSpecBuilder()
+        .setBasePath("") // será definido conforme o endpoint
+        .setPort(TestConfigs.SERVER_PORT)
+        .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+        .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+        .build();
+
+    person = new Person("Leandro", "Costa", "leandro@erudio.com", "Minas Gerais - Brasil", "male");
+}
+```
+🔍 O objetivo é simular o comportamento real de uma requisição HTTP como se fosse feita por ferramentas como Postman ou Insomnia, passando por todas as camadas da aplicação.
+
+### ✅ Teste de Integração: (Create) uma Pessoa
+
+O primeiro teste da classe `PersonControllerIntegrationTest` garante que, ao enviar uma requisição POST com um objeto `Person`, a aplicação retorna corretamente a pessoa criada com todos os campos preenchidos.
+
+#### 🔍 O que está sendo testado?
+
+Este teste verifica se a API é capaz de:
+
+1. Receber um objeto `Person` válido.
+2. Persisti-lo no banco de dados.
+3. Retornar uma resposta com status `200 OK`.
+4. Retornar todos os dados esperados no corpo da resposta, incluindo o `id` gerado.
+
+#### 🧪 Estrutura do teste
+
+```java
+@Test
+@Order(1)
+@DisplayName("JUnit integration given Person when Create One Person Should Return A Person Object")
+void integrationTestGivenPersonObject_when_CreateOnePerson_ShouldReturnAPersonObject() throws JsonProcessingException {
+    
+    var content = given().spec(specificantion)
+        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+        .body(person)
+        .port(TestConfigs.SERVER_PORT)
+        .when()
+            .post()
+        .then()
+            .statusCode(200)
+            .extract()
+            .body()
+            .asString();
+
+    Person createdPerson = objectMapper.readValue(content, Person.class);
+    
+    person = createdPerson;
+
+    assertNotNull(createdPerson);
+    assertNotNull(createdPerson.getId());
+    assertNotNull(createdPerson.getFirstName());
+    assertNotNull(createdPerson.getLastName());
+    assertNotNull(createdPerson.getAddress());
+    assertNotNull(createdPerson.getGender());
+    assertNotNull(createdPerson.getEmail());
+
+    assertTrue(createdPerson.getId() > 0);
+    assertEquals("Leandro", createdPerson.getFirstName());
+    assertEquals("Costa", createdPerson.getLastName());
+    assertEquals("Minas Gerais - Brasil", createdPerson.getAddress());
+    assertEquals("male", createdPerson.getGender());
+    assertEquals("leandro@erudio.com", createdPerson.getEmail());
+}
+```
+### 🔄 Teste de Integração: (Update) uma Pessoa
+
+O segundo teste da classe `PersonControllerIntegrationTest` verifica se, ao enviar uma requisição PUT com alterações em um objeto `Person` previamente criado, a API responde com o objeto atualizado, mantendo a integridade dos dados.
+
+#### 🔍 O que está sendo testado?
+
+Este teste tem como objetivo confirmar que a API:
+
+1. Recebe um objeto `Person` existente com campos alterados.
+2. Atualiza corretamente os dados no banco de dados.
+3. Retorna uma resposta com status `200 OK`.
+4. Retorna o objeto `Person` atualizado no corpo da resposta.
+
+#### 🧪 Estrutura do teste
+
+```java
+@Test
+@Order(2)
+@DisplayName("JUnit integration given Person when Object when Update One Person Should Return a Updated Person Object")
+void integrationTestGivenPersonObject_when_UpdateOnePerson_ShouldReturnAUpdatedPersonObject() throws JsonProcessingException {
+    
+    person.setFirstName("Yuri");
+    person.setEmail("yuri@.com");
+
+    var content = given().spec(specificantion)
+        .contentType(TestConfigs.CONTENT_TYPE_JSON)
+        .body(person)
+        .port(TestConfigs.SERVER_PORT)
+        .when()
+            .put()
+        .then()
+            .statusCode(200)
+            .extract()
+            .body()
+            .asString();
+
+    Person createdPerson = objectMapper.readValue(content, Person.class);
+    
+    person = createdPerson;
+
+    assertNotNull(createdPerson);
+    assertNotNull(createdPerson.getId());
+    assertNotNull(createdPerson.getFirstName());
+    assertNotNull(createdPerson.getLastName());
+    assertNotNull(createdPerson.getAddress());
+    assertNotNull(createdPerson.getGender());
+    assertNotNull(createdPerson.getEmail());
+
+    assertTrue(createdPerson.getId() > 0);
+    assertEquals("Yuri", createdPerson.getFirstName());
+    assertEquals("Costa", createdPerson.getLastName());
+    assertEquals("Minas Gerais - Brasil", createdPerson.getAddress());
+    assertEquals("male", createdPerson.getGender());
+    assertEquals("yuri@.com", createdPerson.getEmail());
+}
+```
+
+🧾 Considerações
+O @Order(2) garante que este teste será executado após o teste de criação (@Order(1)), reutilizando o mesmo objeto person que foi previamente salvo.
+
+O teste altera os campos firstName e email antes de enviar a requisição PUT.
+
+Após a atualização, o teste valida que os campos alterados foram persistidos e retornados corretamente.
+
+As asserções garantem que o restante dos dados permaneça íntegro e consistente.
+
+Esse teste reforça a confiabilidade do endpoint de atualização (PUT) da API RESTful, validando o comportamento esperado quando um recurso existente é modificado.
+________________________________________________________________________________________________________________________
+

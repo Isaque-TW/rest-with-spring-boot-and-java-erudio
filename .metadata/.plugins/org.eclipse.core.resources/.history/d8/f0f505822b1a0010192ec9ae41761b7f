@@ -1,0 +1,20 @@
+package br.com.erudio.integrationtests.controller;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.boot.test.context.SpringBootTest;
+import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
+
+@TestMethodOrder(OrderAnnotation.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+public class PersonControllerIntegrationTest extends AbstractIntegrationTest{
+
+	
+	@Test
+	void test() {
+		
+	}
+}

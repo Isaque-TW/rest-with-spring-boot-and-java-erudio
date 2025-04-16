@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="SwaggerIntegrationTest" project="rest-with-spring-boot-and-java-erudio" tests="1" started="1" failures="0" errors="0" ignored="0">
+  <testsuite name="br.com.erudio.integrationtests.swagger.SwaggerIntegrationTest" time="1.366" displayname="SwaggerIntegrationTest" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.integrationtests.swagger.SwaggerIntegrationTest]">
+    <testcase name="testShouldDisplaySwaggerUiPage" classname="br.com.erudio.integrationtests.swagger.SwaggerIntegrationTest" time="1.366" displayname="JUnit test for Should Display Swagger UI Page" uniqueid="[engine:junit-jupiter]/[class:br.com.erudio.integrationtests.swagger.SwaggerIntegrationTest]/[method:testShouldDisplaySwaggerUiPage()]"/>
+  </testsuite>
+</testrun>
