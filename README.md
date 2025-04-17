@@ -1,7 +1,7 @@
- Este **README** é baseado no curso de **"Desenvolvimento de Aplicações Java com Spring Boot"**, focado na criação e execução de **Testes Unitários** e de **Integração** para aplicações Java utilizando o **Spring Boot 3**. A jornada inclui o uso de ferramentas como **JUnit 5**, **Mockito**, **TestContainers**, **TDD (Desenvolvimento Orientado a Testes)** e **Swagger** para documentar e testar os **endpoints** da **API.**
+## 🚀 Objetivos do Curso
+Este **README** é baseado no curso de **"Desenvolvimento de Aplicações Java com Spring Boot"**, focado na criação e execução de **Testes Unitários** e de **Integração** para aplicações Java utilizando o **Spring Boot 3**. A jornada inclui o uso de ferramentas como **JUnit 5**, **Mockito**, **TestContainers**, **TDD (Desenvolvimento Orientado a Testes)** e **Swagger** para documentar e testar os **endpoints** da **API.**
 
 _______________________________________________________________________________________________________________________
-## 🚀 Objetivos do Curso
 
 Ao longo deste README, vou detalhar todos os passos necessários para desenvolver e testar a aplicação de maneira eficaz. O objetivo é não apenas ensinar como aplicar as ferramentas mencionadas, mas também mostrar as melhores práticas para garantir que a aplicação tenha uma alta cobertura de testes e seja robusta em termos de qualidade e funcionalidade.
 _______________________________________________________________________________________________________________________
@@ -30,7 +30,7 @@ Além disso, utilizaremos a abordagem **TDD (Test-Driven Development)**, que inc
 O objetivo deste README é consolidar o aprendizado, explicando como configurar, desenvolver e testar uma aplicação usando essas ferramentas e práticas.
 ________________________________________________________________________________________________________________________
 
-# 🔧 Configuração do Ambiente de Testes no Spring Boot
+# 🔧 Configuração do Ambiente
 
 Para configurar o ambiente de testes em uma aplicação Spring Boot 3, vamos começar pela criação do projeto até a configuração do arquivo `pom.xml` com as dependências necessárias.
 
