@@ -1,0 +1,256 @@
+package br.com.erudio.integrationtests.controller;
+
+import static io.restassured.RestAssured.given;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import br.com.erudio.config.TestConfigs;
+import br.com.erudio.integrationtests.testcontainers.AbstractIntegrationTest;
+import br.com.erudio.model.Person;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.RequestLoggingFilter;
+import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.specification.RequestSpecification;
+
+@TestMethodOrder(OrderAnnotation.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+public class PersonControllerIntegrationTest extends AbstractIntegrationTest{
+
+	private static RequestSpecification specificantion;  	// Definindo as configs(Requests) entre os serviços //REST Assured
+	private static ObjectMapper objectMapper;
+	private static Person person;
+	
+	@BeforeAll
+	public void setup() {
+		// Given / Arrange
+		objectMapper = new ObjectMapper();
+		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		
+		specificantion = new RequestSpecBuilder()
+			 .setBasePath("/person")
+			 .setPort(TestConfigs.SERVER_PORT)
+			 	 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
+			 	.addFilter(new ResponseLoggingFilter(LogDetail.ALL))
+			 .build();
+		
+		person = new Person("Leandro",
+				"Costa", 
+				"leandro@erudio.com",
+				"Minas Gerais - Brasil", 
+				"Male");
+	}
+	
+	@Test
+	@Order(1)
+	@DisplayName("JUnit integration given Person when Create One Person Should Return A Person Object")
+	void integrationTestGivenPersonObject_when_CreateOnePerson_ShouldReturnAPersonObject() throws JsonProcessingException {
+		
+		var content = given().spec(specificantion)
+					.contentType(TestConfigs.CONTENT_TYPE_JSON)
+					.body(person)
+				.port(TestConfigs.SERVER_PORT)
+				.when()
+					.post()
+				.then()
+					.statusCode(200)
+						.extract()
+							.body()
+								.asString();
+		Person createdPerson = objectMapper.readValue(content, Person.class);
+		
+		person = createdPerson;
+		
+		assertNotNull(createdPerson);
+		
+		assertNotNull(createdPerson.getId());
+		assertNotNull(createdPerson.getFirstName());
+		assertNotNull(createdPerson.getLastName());
+		assertNotNull(createdPerson.getAddress());
+		assertNotNull(createdPerson.getGender());
+		assertNotNull(createdPerson.getEmail());
+		
+		assertTrue(createdPerson.getId() > 0);
+		assertEquals("Leandro", createdPerson.getFirstName());
+		assertEquals("Costa", createdPerson.getLastName());
+		assertEquals("Minas Gerais - Brasil", createdPerson.getAddress());
+		assertEquals("male", createdPerson.getGender());
+		assertEquals("leandro@erudio.com", createdPerson.getEmail());
+	}
+	
+	@Test
+	@Order(2)
+	@DisplayName("JUnit integration given Person when Object when Update One Person Should Return a Updated Person Object")
+	void integrationTestGivenPersonObject_when_UpdateOnePerson_ShouldReturnAUpdatedPersonObject() throws JsonProcessingException {
+		
+		person.setFirstName("Yuri");
+		person.setEmail("yuri@.com");
+		var content = given().spec(specificantion)
+					.contentType(TestConfigs.CONTENT_TYPE_JSON)
+					.body(person)
+				.port(TestConfigs.SERVER_PORT)
+				.when()
+					.put()
+				.then()
+					.statusCode(200)
+						.extract()
+							.body()
+								.asString();
+		Person updatePerson = objectMapper.readValue(content, Person.class);
+		
+		person = updatePerson;
+		
+		assertNotNull(updatePerson);
+		
+		assertNotNull(updatePerson.getId());
+		assertNotNull(updatePerson.getFirstName());
+		assertNotNull(updatePerson.getLastName());
+		assertNotNull(updatePerson.getAddress());
+		assertNotNull(updatePerson.getGender());
+		assertNotNull(updatePerson.getEmail());
+		
+		assertTrue(updatePerson.getId() > 0);
+		assertEquals("Yuri", updatePerson.getFirstName());
+		assertEquals("Costa", updatePerson.getLastName());
+		assertEquals("Minas Gerais - Brasil", updatePerson.getAddress());
+		assertEquals("male", updatePerson.getGender());
+		assertEquals("yuri@.com", updatePerson.getEmail());
+	}
+	
+	@Test
+	@Order(3)
+	@DisplayName("JUnit integration given Person when findById Should Return A Person Object")
+	void integrationTestGivenPersonObject_when_findById_ShouldReturnAPersonObject() throws JsonProcessingException {
+		
+		var content = given().spec(specificantion)
+					.pathParam("id", person.getId())
+				.when()
+					.get("{id}")
+				.then()
+					.statusCode(200)
+						.extract()
+							.body()
+								.asString();
+		Person foundPerson = objectMapper.readValue(content, Person.class);
+		
+		
+		assertNotNull(foundPerson);
+		
+		assertNotNull(foundPerson.getId());
+		assertNotNull(foundPerson.getFirstName());
+		assertNotNull(foundPerson.getLastName());
+		assertNotNull(foundPerson.getAddress());
+		assertNotNull(foundPerson.getGender());
+		assertNotNull(foundPerson.getEmail());
+		
+		assertTrue(foundPerson.getId() > 0);
+		assertEquals("Yuri", foundPerson.getFirstName());
+		assertEquals("Costa", foundPerson.getLastName());
+		assertEquals("Minas Gerais - Brasil", foundPerson.getAddress());
+		assertEquals("male", foundPerson.getGender());
+		assertEquals("yuri@.com", foundPerson.getEmail());
+	}
+	
+	@Test
+	@Order(4)
+	@DisplayName("JUnit integration given Person Object when findAll Should Return A Person Object")
+	void integrationTest_when_findAll_ShouldReturnAPersonObject() throws JsonProcessingException {
+		
+		Person anotherPerson = new Person(
+					"Gabriela",
+					"Rodrigues", 
+					"gabi@rodrigues.com",
+					"Minas Gerais - Brasil", 
+					"Female");
+		
+		given().spec(specificantion)
+			.contentType(TestConfigs.CONTENT_TYPE_JSON)
+			.body(anotherPerson)
+		.when()
+			.post()
+		.then()
+			.statusCode(200);
+		
+		var content = given().spec(specificantion)
+				.when()
+					.get()
+				.then()
+					.statusCode(200)
+						.extract()
+							.body()
+								.asString();
+		Person[] myArray = objectMapper.readValue(content, Person[].class);
+		List<Person> people = Arrays.asList(myArray);
+		
+		Person foundPersonOne = people.get(0);
+		
+		assertNotNull(foundPersonOne);
+		
+		assertNotNull(foundPersonOne.getId());
+		assertNotNull(foundPersonOne.getFirstName());
+		assertNotNull(foundPersonOne.getLastName());
+		assertNotNull(foundPersonOne.getAddress());
+		assertNotNull(foundPersonOne.getGender());
+		assertNotNull(foundPersonOne.getEmail());
+		
+		assertTrue(foundPersonOne.getId() > 0);
+		assertEquals("Gabriela", foundPersonOne.getFirstName());
+		assertEquals("Rodrigues", foundPersonOne.getLastName());
+		assertEquals("Minas Gerais - Brasil", foundPersonOne.getAddress());
+		assertEquals("Female", foundPersonOne.getGender());
+		assertEquals("gabi@rodrigues.com", foundPersonOne.getEmail());
+		
+		Person foundPersonTwo = people.get(1);
+		
+		assertNotNull(foundPersonTwo);
+		
+		assertNotNull(foundPersonTwo.getId());
+		assertNotNull(foundPersonTwo.getFirstName());
+		assertNotNull(foundPersonTwo.getLastName());
+		assertNotNull(foundPersonTwo.getAddress());
+		assertNotNull(foundPersonTwo.getGender());
+		assertNotNull(foundPersonTwo.getEmail());
+		
+		assertTrue(foundPersonTwo.getId() > 0);
+		assertEquals("Yuri", foundPersonTwo.getFirstName());
+		assertEquals("Costa", foundPersonTwo.getLastName());
+		assertEquals("Minas Gerais - Brasil", foundPersonTwo.getAddress());
+		assertEquals("male", foundPersonTwo.getGender());
+		assertEquals("yuri@.com", foundPersonTwo.getEmail());
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

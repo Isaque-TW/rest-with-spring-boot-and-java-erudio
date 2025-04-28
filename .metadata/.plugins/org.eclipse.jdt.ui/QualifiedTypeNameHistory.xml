@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.DeleteMapping"/>
-    <fullyQualifiedTypeName name="org.junit.jupiter.api.extension.ExtendWith"/>
     <fullyQualifiedTypeName name="org.mockito.junit.jupiter.MockitoExtension"/>
     <fullyQualifiedTypeName name="br.com.erudio.repositories.PersonRepository"/>
     <fullyQualifiedTypeName name="org.mockito.Mock"/>
@@ -60,4 +58,6 @@
     <fullyQualifiedTypeName name="net.bytebuddy.agent.VirtualMachine.ForHotSpot.Connection.Response"/>
     <fullyQualifiedTypeName name="com.fasterxml.jackson.databind.JsonMappingException"/>
     <fullyQualifiedTypeName name="br.com.erudio.config.TestConfigs"/>
+    <fullyQualifiedTypeName name="org.assertj.core.util.Arrays"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
 </qualifiedTypeNameHistroy>
